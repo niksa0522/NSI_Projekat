@@ -1,4 +1,4 @@
-package com.example.nsiprojekat.ui.gallery
+package com.example.nsiprojekat.Screens.gallery
 
 import android.os.Bundle
 import android.view.LayoutInflater

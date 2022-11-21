@@ -1,4 +1,4 @@
-package com.example.nsiprojekat.ui.slideshow
+package com.example.nsiprojekat.Screens.slideshow
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

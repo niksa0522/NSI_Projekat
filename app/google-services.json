@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "284724482215",
+    "project_id": "nsi-projekat",
+    "storage_bucket": "nsi-projekat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:284724482215:android:20dd8100b23d48ae9c4b82",
+        "android_client_info": {
+          "package_name": "com.example.nsiprojekat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "284724482215-00sgoebvetofaiclafssuc1j1uj1qqsp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIGgO3ydyClR6S_wCafYmp9LKhGO_yryI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "284724482215-00sgoebvetofaiclafssuc1j1uj1qqsp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
