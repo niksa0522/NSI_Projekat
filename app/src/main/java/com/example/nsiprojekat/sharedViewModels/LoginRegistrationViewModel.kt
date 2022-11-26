@@ -109,6 +109,8 @@ class LoginRegistrationViewModel : ViewModel() {
         bitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data = baos.toByteArray()
         val uploadTask = imageRef!!.putBytes(data)
+        //Ako pukne ovde, kao sto je puklo kad sam zaboravio da enableujem storage, acc ce da se kreira
+        //ali slika i ostali info nece da se ubaci u db. Mozda bi moglo ako nije successful task da se obrise acc?
         val urlTask = uploadTask.continueWithTask{ task ->
             if (!task.isSuccessful) {
                 task.exception?.let {
@@ -123,7 +125,6 @@ class LoginRegistrationViewModel : ViewModel() {
                 val user = User(fName.value,lName.value,imageUrl)
                 val database = Firebase.database("https://nsi-projekat-default-rtdb.europe-west1.firebasedatabase.app/")
                 val userRef = database.reference.child("users").child(userID).setValue(user)
-                //TODO staviti email
                 database.reference.child("emails").child(userID).setValue(email)
                 val profileUpdate = userProfileChangeRequest {
                     displayName = "${fName.value} ${lName.value}"
@@ -144,7 +145,7 @@ class LoginRegistrationViewModel : ViewModel() {
     private fun checkData(login: Boolean, activity: FragmentActivity):Boolean{
         if(email.value == null || email.value == "")
         {
-            Toast.makeText(activity, "Unesi Korisnicko Ime!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, "Unesi Email!", Toast.LENGTH_SHORT).show()
             return false
         }
         if(password.value == null || password.value == "")
