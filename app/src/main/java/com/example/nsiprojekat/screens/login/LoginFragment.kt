@@ -1,17 +1,23 @@
 package com.example.nsiprojekat.`screens`.login
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.nsiprojekat.R
 import com.example.nsiprojekat.sharedViewModels.LoginRegistrationViewModel
 import com.example.nsiprojekat.databinding.FragmentLoginBinding
+import com.example.nsiprojekat.sharedViewModels.AuthState
+import com.example.nsiprojekat.activites.MainActivity
+
 
 class LoginFragment : Fragment() {
 
@@ -44,10 +50,10 @@ class LoginFragment : Fragment() {
 
         InitData(usernameET,passwordET)
 
-        binding.btnLogin.setOnClickListener{ViewModel.login(requireActivity())}
+        binding.btnLogin.setOnClickListener{ViewModel.login()}
         binding.tvReg.setOnClickListener{findNavController().navigate(R.id.action_loginFragment_to_registrationFragment)}
 
-
+        setAuthStateObserver()
     }
 
     fun InitData(usernameET: EditText, passwordET: EditText){
@@ -58,7 +64,25 @@ class LoginFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        ViewModel.authState.removeObservers(viewLifecycleOwner)
         _binding = null
+    }
+
+    private fun setAuthStateObserver() {
+        val authStateObserver = Observer<AuthState> { state ->
+            if (state == AuthState.Success) {
+                val i: Intent = Intent(activity, MainActivity::class.java)
+                i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                activity!!.startActivity(i)
+                activity!!.finish()
+            }
+            else {
+                if (state is AuthState.AuthError) {
+                    Toast.makeText(view!!.context, state.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        ViewModel.authState.observe(viewLifecycleOwner, authStateObserver)
     }
 
 }

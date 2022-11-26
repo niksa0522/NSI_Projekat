@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.text.Editable
+import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
@@ -18,6 +19,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import com.google.rpc.context.AttributeContext.Auth
 import java.io.ByteArrayOutputStream
 
 class LoginRegistrationViewModel : ViewModel() {
@@ -44,6 +46,9 @@ class LoginRegistrationViewModel : ViewModel() {
     val email: LiveData<String> = _email
 
 
+    private val _authState = MutableLiveData<AuthState>(AuthState.Idle)
+    val authState: LiveData<AuthState> = _authState
+
     init {
         auth = Firebase.auth
     }
@@ -65,42 +70,39 @@ class LoginRegistrationViewModel : ViewModel() {
     }
 
 
-    fun createAccount(activity: FragmentActivity){
-        if(checkData(false,activity)) {
+    fun createAccount(){
+        if(checkData(false)) {
             val email = "${email.value}"
             auth.createUserWithEmailAndPassword(email, password.value!!)
-                .addOnCompleteListener(activity) { task ->
+                .addOnCompleteListener() { task ->
                     if (task.isSuccessful) {
                         val user = auth.currentUser
-                        UploadInfo(activity)
+                        UploadInfo()
                     } else {
-                        Toast.makeText(activity, "Creation Failed!", Toast.LENGTH_SHORT).show()
+                        _authState.value = AuthState.AuthError("Creation Failed!")
                     }
                 }
         }
     }
 
-    fun login(activity: FragmentActivity){
-        if(checkData(true,activity)) {
+    fun login(){
+        if(checkData(true)) {
             val email = "${email.value}"
             auth.signInWithEmailAndPassword(email, password.value!!)
-                .addOnCompleteListener(activity) { task ->
+                .addOnCompleteListener() { task ->
                     if (task.isSuccessful) {
                         val user = auth.currentUser
-                        val i: Intent = Intent(activity, MainActivity::class.java)
-                        i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                        activity.startActivity(i)
-                        activity.finish()
+                        _authState.value = AuthState.Success
                     } else {
-                        Toast.makeText(activity, "Log In Failed!", Toast.LENGTH_SHORT).show()
+                        _authState.value = AuthState.AuthError("Login Failed!")
                     }
                 }
         }
     }
-    private fun UploadInfo(activity: FragmentActivity){
+    private fun UploadInfo(){
         val userID: String = auth.currentUser?.uid ?: ""
         if(userID == "")
-            Toast.makeText(activity, "Ovo nije trebalo da se desi!", Toast.LENGTH_SHORT).show()
+            _authState.value = AuthState.AuthError("Ovo nije trebalo da se desi!")
         //Prvo se upload-uje slika
         var storage = Firebase.storage
         var imageRef: StorageReference? = storage.reference.child("users").child(userID).child("${email.value}.jpg")
@@ -109,12 +111,18 @@ class LoginRegistrationViewModel : ViewModel() {
         bitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data = baos.toByteArray()
         val uploadTask = imageRef!!.putBytes(data)
-        //Ako pukne ovde, kao sto je puklo kad sam zaboravio da enableujem storage, acc ce da se kreira
-        //ali slika i ostali info nece da se ubaci u db. Mozda bi moglo ako nije successful task da se obrise acc?
+
         val urlTask = uploadTask.continueWithTask{ task ->
             if (!task.isSuccessful) {
                 task.exception?.let {
-                    throw it
+                    val user = auth.currentUser
+                    user!!.delete()
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Log.d("SIGNUP", "User account deleted.")
+                            }
+                        }
+                    _authState.value = AuthState.AuthError("Upload error: ${it.message}")
                 }
             }
             imageRef.downloadUrl
@@ -132,45 +140,43 @@ class LoginRegistrationViewModel : ViewModel() {
                 }
 
                 auth.currentUser!!.updateProfile(profileUpdate)
-                val i: Intent = Intent(activity, MainActivity::class.java)
-                i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                activity.startActivity(i)
-                activity.finish()
+                _authState.value = AuthState.Success
             }
         }
-
-
-
     }
-    private fun checkData(login: Boolean, activity: FragmentActivity):Boolean{
+    private fun checkData(login: Boolean):Boolean{
         if(email.value == null || email.value == "")
         {
-            Toast.makeText(activity, "Unesi Email!", Toast.LENGTH_SHORT).show()
+            _authState.value = AuthState.AuthError("Unesi Email!")
             return false
         }
         if(password.value == null || password.value == "")
         {
-            Toast.makeText(activity, "Unesi Lozinku!", Toast.LENGTH_SHORT).show()
+            _authState.value = AuthState.AuthError("Unesi Lozinku!")
             return false
         }
         if(!login){
             if(fName.value == null || fName.value == "")
             {
-                Toast.makeText(activity, "Unesi Ime!", Toast.LENGTH_SHORT).show()
+                _authState.value = AuthState.AuthError("Unesi Ime!")
                 return false
             }
             if(lName.value == null || lName.value == "")
             {
-                Toast.makeText(activity, "Unesi Prezime!", Toast.LENGTH_SHORT).show()
+                _authState.value = AuthState.AuthError("Unesi Prezime!")
                 return false
             }
             if(picture.value == null){
-                Toast.makeText(activity, "Potrebna je slika!", Toast.LENGTH_SHORT).show()
+                _authState.value = AuthState.AuthError("Potrebna je slika!")
                 return false
             }
         }
         return true
     }
+}
 
-
+sealed class AuthState {
+    object Idle : AuthState()
+    object Success : AuthState()
+    class AuthError(val message: String? = null) : AuthState()
 }

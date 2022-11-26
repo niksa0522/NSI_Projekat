@@ -11,14 +11,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.nsiprojekat.R
+import com.example.nsiprojekat.activites.MainActivity
 import com.example.nsiprojekat.sharedViewModels.LoginRegistrationViewModel
 import com.example.nsiprojekat.databinding.FragmentRegistrationBinding
 import com.example.nsiprojekat.helpers.PermissionHelper
+import com.example.nsiprojekat.sharedViewModels.AuthState
 
 class RegistrationFragment : Fragment() {
 
@@ -49,14 +53,14 @@ class RegistrationFragment : Fragment() {
 
         InitData(usernameET,passwordET,fName,lName)
 
-        binding.btnReg.setOnClickListener{ViewModel.createAccount(requireActivity())}
+        binding.btnReg.setOnClickListener{ViewModel.createAccount()}
         binding.tvLogin.setOnClickListener{findNavController().navigate(R.id.action_registrationFragment_to_loginFragment)}
         binding.btnAddPicture.setOnClickListener{takePicture()}
         ViewModel.picture.observe(viewLifecycleOwner) { newPicture ->
             binding.profilePic.setImageBitmap(newPicture)
         }
 
-
+        setAuthStateObserver()
     }
     fun InitData(usernameET: EditText, passwordET: EditText, FName: EditText, LName: EditText){
         usernameET.setText(ViewModel.email.value ?: "")
@@ -93,8 +97,24 @@ class RegistrationFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        ViewModel.authState.removeObservers(viewLifecycleOwner)
         _binding = null
     }
 
+    private fun setAuthStateObserver() {
+        val authStateObserver = Observer<AuthState> { state ->
+            if (state == AuthState.Success) {
+                val i: Intent = Intent(activity, MainActivity::class.java)
+                i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                activity!!.startActivity(i)
+                activity!!.finish()
+            } else {
+                if (state is AuthState.AuthError) {
+                    Toast.makeText(view!!.context, state.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        ViewModel.authState.observe(viewLifecycleOwner, authStateObserver)
+    }
 
 }
