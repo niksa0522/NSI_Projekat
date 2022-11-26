@@ -10,4 +10,16 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+
+
+    <string name="hint_kI">Email</string>
+    <string name="hint_pW">Sifra</string>
+    <string name="hint_FName">Ime</string>
+    <string name="hint_LName">Prezime</string>
+    <string name="btnReg">Registruj Se</string>
+    <string name="tVlogin">Prijavi se</string>
+    <string name="btnAddPicture">Dodaj Sliku</string>
+    <string name="btnLogin">Prijavi se</string>
+    <string name="tVReg">Registruj se</string>
+    <string name="tVSignOut">Odjavi se</string>
 </resources>

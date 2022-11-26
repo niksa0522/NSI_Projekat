@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    tools:context=".screens.registration.RegisterFragment">
+
+
+    <data>
+        <variable
+            name="data"
+            type="com.example.nsiprojekat.sharedViewModels.LoginRegistrationViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/FName"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="32dp"
+                android:hint="@string/hint_FName"
+                app:errorIconDrawable="@drawable/ic_error"
+                app:helperTextTextAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                app:layout_constraintBottom_toTopOf="@+id/LName"
+                app:layout_constraintEnd_toStartOf="@+id/llPicture"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etFName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:afterTextChanged="@{data.onFNameTextChanged}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/LName"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="32dp"
+                android:hint="@string/hint_LName"
+                app:errorIconDrawable="@drawable/ic_error"
+                app:helperTextTextAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                app:layout_constraintBottom_toTopOf="@+id/guideline2"
+                app:layout_constraintEnd_toStartOf="@+id/llPicture"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/FName">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etLName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:afterTextChanged="@{data.onLNameTextChanged}"
+                    android:textColorHint="#757575" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <LinearLayout
+                android:id="@+id/llPicture"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/guideline2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/profilePic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"
+                    android:adjustViewBounds="true"
+                    android:padding="2dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_broken_image" />
+
+                <Button
+                    android:id="@+id/btnAddPicture"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0"
+                    android:text="@string/btnAddPicture"
+                    app:layout_constraintTop_toBottomOf="@+id/LName" />
+
+
+            </LinearLayout>
+
+
+            <View
+                android:id="@+id/divider"
+
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/guideline2"
+                tools:layout_editor_absoluteY="300dp" />
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/username"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="32dp"
+                android:hint="@string/hint_kI"
+                app:errorIconDrawable="@drawable/ic_error"
+                app:helperTextTextAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:afterTextChanged="@{data.onEmailTextChanged}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/password"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="32dp"
+                android:hint="@string/hint_pW"
+                app:errorIconDrawable="@drawable/ic_error"
+                app:helperTextTextAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/username">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:afterTextChanged="@{data.onPasswordTextChanged}"
+                    android:inputType="textPassword" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <Button
+                android:id="@+id/btnReg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/btnReg"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/password" />
+
+            <TextView
+                android:id="@+id/tvLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/tVlogin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnReg" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.5" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</layout>

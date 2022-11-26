@@ -1,4 +1,4 @@
-package com.example.nsiprojekat.Screens.gallery
+package com.example.nsiprojekat.`screens`.gallery
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

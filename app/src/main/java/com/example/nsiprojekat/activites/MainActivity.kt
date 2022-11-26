@@ -1,4 +1,4 @@
-package com.example.nsiprojekat.Activites
+package com.example.nsiprojekat.activites
 
 import android.os.Bundle
 import android.view.Menu
