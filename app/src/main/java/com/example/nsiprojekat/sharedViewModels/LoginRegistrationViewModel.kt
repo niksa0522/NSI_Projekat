@@ -133,7 +133,7 @@ class LoginRegistrationViewModel : ViewModel() {
                 val user = User(fName.value,lName.value,imageUrl)
                 val database = Firebase.database("https://nsi-projekat-default-rtdb.europe-west1.firebasedatabase.app/")
                 val userRef = database.reference.child("users").child(userID).setValue(user)
-                database.reference.child("emails").child(userID).setValue(email)
+                database.reference.child("emails").child(userID).setValue(email.value)
                 val profileUpdate = userProfileChangeRequest {
                     displayName = "${fName.value} ${lName.value}"
                     photoUri = Uri.parse(imageUrl)

@@ -3,6 +3,7 @@ package com.example.nsiprojekat.activites
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
+            R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,R.id.nav_chat
         ), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
@@ -60,6 +61,8 @@ class MainActivity : AppCompatActivity() {
         Glide.with(this).load(auth.currentUser!!.photoUrl).into(profilePic)
         val tvLogout: TextView = binding.tVlogout
         tvLogout.setOnClickListener{Logout()}
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

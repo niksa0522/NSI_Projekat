@@ -22,4 +22,10 @@
         android:name="com.example.nsiprojekat.screens.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/nav_chat"
+        android:name="com.example.nsiprojekat.screens.chatMain.ChatMainFragment"
+        android:label="fragment_chat_main"
+        tools:layout="@layout/fragment_chat_main" />
+
 </navigation>

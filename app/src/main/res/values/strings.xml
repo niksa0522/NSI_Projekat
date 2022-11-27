@@ -22,4 +22,7 @@
     <string name="btnLogin">Prijavi se</string>
     <string name="tVReg">Registruj se</string>
     <string name="tVSignOut">Odjavi se</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hint_Email">Email</string>
 </resources>
