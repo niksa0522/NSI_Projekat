@@ -22,4 +22,8 @@
     <string name="btnLogin">Prijavi se</string>
     <string name="tVReg">Registruj se</string>
     <string name="tVSignOut">Odjavi se</string>
+
+    <string name="menu_places">Places</string>
+    <string name="btnAddPlace">Dodaj mesto</string>
+    <string name="btnSelectLocation">Izaberi lokaciju na mapi</string>
 </resources>

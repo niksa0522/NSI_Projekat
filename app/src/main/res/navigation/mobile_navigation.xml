@@ -22,4 +22,25 @@
         android:name="com.example.nsiprojekat.screens.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+
+<!--    places feature izmene   -->
+    <fragment
+        android:id="@+id/nav_places"
+        android:name="com.example.nsiprojekat.screens.placesList.PlacesListFragment"
+        android:label="Meetup Places"
+        tools:layout="@layout/fragment_places_list">
+        <action
+            android:id="@+id/action_nav_places_to_addPlaceFragment"
+            app:destination="@id/addPlaceFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addPlaceFragment"
+        android:name="com.example.nsiprojekat.screens.placesAddNew.AddPlaceFragment"
+        android:label="Add New Place"
+        tools:layout="@layout/fragment_add_place" />
+
+    <!--    places feature izmene   -->
 </navigation>

@@ -37,18 +37,32 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        binding.appBarMain.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+        //region places feature izmene
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        navController.addOnDestinationChangedListener{ controller, destination, arguments ->
+            if (destination.id == R.id.addPlaceFragment)
+                binding.appBarMain.fab.hide()
+            else
+                binding.appBarMain.fab.show()
         }
+
+        binding.appBarMain.fab.setOnClickListener { view ->
+            if (navController.currentDestination!!.id == R.id.nav_places) {
+                navController.navigate(R.id.action_nav_places_to_addPlaceFragment)
+            }
+        }
+        //endregion
+
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
+
+        //region places feature izmene
         appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
+            R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_places
         ), drawerLayout)
+        //endregion
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
