@@ -40,10 +40,10 @@ class MainActivity : AppCompatActivity() {
         //region places feature izmene
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         navController.addOnDestinationChangedListener{ controller, destination, arguments ->
-            if (destination.id == R.id.addPlaceFragment)
-                binding.appBarMain.fab.hide()
-            else
+            if (destination.id == R.id.nav_places)
                 binding.appBarMain.fab.show()
+            else
+                binding.appBarMain.fab.hide()
         }
 
         binding.appBarMain.fab.setOnClickListener { view ->

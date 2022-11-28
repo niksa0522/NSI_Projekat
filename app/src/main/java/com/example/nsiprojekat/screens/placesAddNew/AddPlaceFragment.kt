@@ -28,10 +28,9 @@ class AddPlaceFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_place,container,false)
-        val root = binding?.root
-        return root
+    ): View {
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_place, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,41 +45,44 @@ class AddPlaceFragment : Fragment() {
         viewModel.picture.observe(viewLifecycleOwner) { newPicture ->
             binding.placePic.setImageBitmap(newPicture)
         }
+        binding.btnLocation.setOnClickListener { selectPlaceLocation() }
     }
 
-    private fun initData(placeNameET: EditText, placeLatET: EditText, placeLongET: EditText){
+    private fun initData(placeNameET: EditText, placeLatET: EditText, placeLongET: EditText) {
         placeNameET.setText(viewModel.placeName.value ?: "")
         placeLatET.setText(viewModel.placeLat.value ?: "")
         placeLongET.setText(viewModel.placeLong.value ?: "")
     }
 
-    val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-            result-> if(result.resultCode == Activity.RESULT_OK){
-        val data: Intent? = result.data
-        val picture: Bitmap = data?.extras?.get("data") as Bitmap
-        viewModel.setPicture(picture)
-    }
+    private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            result-> if(result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                val picture: Bitmap = data?.extras?.get("data") as Bitmap
+                viewModel.setPicture(picture)
+            }
     }
 
-    fun takePicture(){
+    private fun takePicture(){
         if(PermissionHelper.isCameraPermissionGranted(requireContext())) {
-            val cameraIntent: Intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             resultLauncher.launch(cameraIntent)
         }
-        else{
+        else {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
     }
     private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()){
+        ActivityResultContracts.RequestPermission()) {
             isGranted: Boolean->
-        if(isGranted){
+        if(isGranted) {
             takePicture()
         }
     }
 
     fun selectPlaceLocation() {
         //TODO: figure out how to launch gmaps and get latlong
+        findNavController().navigate(R.id.action_addPlaceFragment_to_placesChooseLocationFragment)
+
     }
 
     override fun onDestroyView() {

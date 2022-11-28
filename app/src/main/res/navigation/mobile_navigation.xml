@@ -32,7 +32,7 @@
         <action
             android:id="@+id/action_nav_places_to_addPlaceFragment"
             app:destination="@id/addPlaceFragment"
-            app:popUpTo="@id/loginFragment"
+            app:popUpTo="@id/nav_places"
             app:popUpToInclusive="true" />
     </fragment>
 
@@ -40,7 +40,28 @@
         android:id="@+id/addPlaceFragment"
         android:name="com.example.nsiprojekat.screens.placesAddNew.AddPlaceFragment"
         android:label="Add New Place"
-        tools:layout="@layout/fragment_add_place" />
+        tools:layout="@layout/fragment_add_place">
+        <action
+            android:id="@+id/action_addPlaceFragment_to_placesChooseLocationFragment"
+            app:destination="@id/placesChooseLocationFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/placesChooseLocationFragment"
+        android:name="com.example.nsiprojekat.screens.placesChooseLocation.PlacesChooseLocationFragment"
+        android:label="Choose Place Location"
+        tools:layout="@layout/fragment_places_choose_location">
+        <action
+            android:id="@+id/action_placesChooseLocationFragment_to_addPlaceFragment"
+            app:destination="@id/addPlaceFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="400dp" >
+    </fragment>
 
     <!--    places feature izmene   -->
 </navigation>

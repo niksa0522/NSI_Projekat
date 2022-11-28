@@ -23,7 +23,12 @@
     <string name="tVReg">Registruj se</string>
     <string name="tVSignOut">Odjavi se</string>
 
+    <!-- meetup places izmene -->
     <string name="menu_places">Places</string>
     <string name="btnAddPlace">Dodaj mesto</string>
     <string name="btnSelectLocation">Izaberi lokaciju na mapi</string>
+    <string name="mapLabel">Izbor lokacije</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- meetup places izmene -->
 </resources>
