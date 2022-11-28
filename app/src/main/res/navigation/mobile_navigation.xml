@@ -26,6 +26,20 @@
         android:id="@+id/nav_chat"
         android:name="com.example.nsiprojekat.screens.chatMain.ChatMainFragment"
         android:label="fragment_chat_main"
-        tools:layout="@layout/fragment_chat_main" />
+        tools:layout="@layout/fragment_chat_main" >
+        <action
+            android:id="@+id/action_nav_chat_to_chatWithFriendFragment"
+            app:destination="@id/chatWithFriendFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatWithFriendFragment"
+        android:name="com.example.nsiprojekat.screens.chatWithFriend.ChatWithFriendFragment"
+        android:label="fragment_chat_with_friend"
+        tools:layout="@layout/fragment_chat_with_friend" >
+        <argument
+            android:name="uid"
+            app:argType="string"
+            android:defaultValue='""' />
+    </fragment>
 
 </navigation>

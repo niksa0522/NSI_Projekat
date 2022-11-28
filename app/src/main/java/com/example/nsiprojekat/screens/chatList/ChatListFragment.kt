@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nsiprojekat.Adapters.FriendListAdapter
 import com.example.nsiprojekat.Adapters.RequestsAdapter
@@ -23,7 +24,7 @@ class ChatListFragment : Fragment(),FriendListAdapter.FriendClickInterface {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.getFriends()
+
         Log.d("ChatListFragment","OnCreate")
 
     }
@@ -33,23 +34,25 @@ class ChatListFragment : Fragment(),FriendListAdapter.FriendClickInterface {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        Log.d("ChatListFragment","onCreateView")
+        viewModel.getFriends()
         return inflater.inflate(R.layout.fragment_chat_list, container, false)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
+        Log.d("ChatListFragment","onViewCreated")
         viewModel.friends.observe(viewLifecycleOwner){
             if(it.size>0){
                 var list = it
                 //mozda obrnuti listu
                 if(adapter==null){
                     adapter= FriendListAdapter(this)
-                    val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerUsers)
-                    recyclerView.adapter=adapter
                 }
                 adapter!!.setList(list)
+                val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerUsers)
+                recyclerView.adapter=adapter
             }
         }
         //TODO change look of friends and requests screens
@@ -57,7 +60,14 @@ class ChatListFragment : Fragment(),FriendListAdapter.FriendClickInterface {
     }
 
     override fun onFriendClicked(friendUid: String) {
-        Log.d("OnClickFriend","TODO")
+        val bundle = Bundle()
+        bundle.putString("uid",friendUid)
+        findNavController().navigate(R.id.action_nav_chat_to_chatWithFriendFragment,bundle)
         //mislim da nema potreba shared view model, najlakse je da se otvori novi fragment i da se njemu prosledi uid friend-a
+    }
+
+    override fun onDestroyView() {
+        Log.d("CLF","OnDestroy")
+        super.onDestroyView()
     }
 }

@@ -44,6 +44,7 @@ class ChatMainFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.d("CMF","OnDestroy")
         _binding=null
     }
 

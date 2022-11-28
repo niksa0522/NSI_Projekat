@@ -35,7 +35,7 @@ class FriendsRequestsFragment : Fragment(),RequestsAdapter.RequestClickInterface
     ): View? {
         _binding = FragmentFriendsRequestsBinding.inflate(inflater,container,false)
         val root: View = binding.root
-        Log.d("FriendsRequestsFragment","OnCreate")
+        Log.d("FriendsRequestsFragment","onCreateView")
         viewModel.getRequests()
         return root
     }
