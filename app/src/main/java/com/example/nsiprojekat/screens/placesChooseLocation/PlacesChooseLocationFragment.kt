@@ -9,16 +9,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.nsiprojekat.R
+import com.example.nsiprojekat.databinding.FragmentPlacesChooseLocationBinding
 import com.example.nsiprojekat.helpers.PermissionHelper
+import com.example.nsiprojekat.sharedViewModels.AddPlaceViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
@@ -29,7 +30,7 @@ class PlacesChooseLocationFragment : Fragment() {
     //FIXME: this is shitcode and needs revisions asap
     //TODO: fab onclick puts latlong to VM and returns to add place screen
 
-    private val viewModel: PlacesChooseLocationViewModel by viewModels()
+    private val viewModel: AddPlaceViewModel by activityViewModels()
     private var fusedLocationClient: FusedLocationProviderClient? = null
     private lateinit var map: GoogleMap
     private var currentLocation = LatLng(
@@ -38,11 +39,15 @@ class PlacesChooseLocationFragment : Fragment() {
     private var lastLocation: Location? = null
     private var markerPos: LatLng? = null
 
+    private var _binding: FragmentPlacesChooseLocationBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_places_choose_location, container, false)
+    ): View {
+        _binding = FragmentPlacesChooseLocationBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,6 +82,14 @@ class PlacesChooseLocationFragment : Fragment() {
                     markerPos = marker.position
                 }
             })
+        }
+
+        binding.fabAdd.setOnClickListener {
+            viewModel.setLatLong(
+                markerPos!!.latitude,
+                markerPos!!.longitude
+            )
+            findNavController().navigate(R.id.action_placesChooseLocationFragment_to_addPlaceFragment)
         }
     }
 

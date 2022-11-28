@@ -13,15 +13,16 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import com.example.nsiprojekat.R
 import com.example.nsiprojekat.databinding.FragmentAddPlaceBinding
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.nsiprojekat.helpers.PermissionHelper
+import com.example.nsiprojekat.sharedViewModels.AddPlaceViewModel
 
 class AddPlaceFragment : Fragment() {
 
-    private val viewModel: AddPlaceViewModel by viewModels()
+    private val viewModel: AddPlaceViewModel by activityViewModels()
     private var _binding: FragmentAddPlaceBinding? = null
     private val binding get() = _binding!!
 

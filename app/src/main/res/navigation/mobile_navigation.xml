@@ -53,7 +53,9 @@
         tools:layout="@layout/fragment_places_choose_location">
         <action
             android:id="@+id/action_placesChooseLocationFragment_to_addPlaceFragment"
-            app:destination="@id/addPlaceFragment" />
+            app:destination="@id/addPlaceFragment"
+            app:popUpTo="@id/addPlaceFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment

@@ -8,7 +8,7 @@
     <data>
         <variable
             name="data"
-            type="com.example.nsiprojekat.screens.placesAddNew.AddPlaceViewModel" />
+            type="com.example.nsiprojekat.sharedViewModels.AddPlaceViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

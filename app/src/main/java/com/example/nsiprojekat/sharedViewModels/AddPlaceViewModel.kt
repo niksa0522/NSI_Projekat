@@ -1,8 +1,7 @@
-package com.example.nsiprojekat.screens.placesAddNew
+package com.example.nsiprojekat.sharedViewModels
 
 import android.graphics.Bitmap
 import android.text.Editable
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,6 +35,11 @@ class AddPlaceViewModel : ViewModel() {
 
     fun setPicture(picture: Bitmap) {
         _picture.value = picture
+    }
+
+    fun setLatLong(lat: Double, long: Double) {
+        _placeLat.value = lat.toString()
+        _placeLong.value = long.toString()
     }
 
     fun addPlaceToDB() {
