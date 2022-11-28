@@ -44,6 +44,11 @@
         <action
             android:id="@+id/action_addPlaceFragment_to_placesChooseLocationFragment"
             app:destination="@id/placesChooseLocationFragment" />
+        <action
+            android:id="@+id/action_addPlaceFragment_to_nav_places"
+            app:destination="@id/nav_places"
+            app:popUpTo="@id/nav_places"
+            app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment

@@ -11,14 +11,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import com.example.nsiprojekat.R
 import com.example.nsiprojekat.databinding.FragmentAddPlaceBinding
 import androidx.navigation.fragment.findNavController
+import com.example.nsiprojekat.activites.MainActivity
 import com.example.nsiprojekat.helpers.PermissionHelper
 import com.example.nsiprojekat.sharedViewModels.AddPlaceViewModel
+import com.example.nsiprojekat.sharedViewModels.AuthState
+import com.example.nsiprojekat.sharedViewModels.UploadState
 
 class AddPlaceFragment : Fragment() {
 
@@ -47,6 +52,9 @@ class AddPlaceFragment : Fragment() {
             binding.placePic.setImageBitmap(newPicture)
         }
         binding.btnLocation.setOnClickListener { selectPlaceLocation() }
+        binding.btnAddPlace.setOnClickListener { viewModel.addPlaceToDB() }
+
+        setUploadStateListener()
     }
 
     private fun initData(placeNameET: EditText, placeLatET: EditText, placeLongET: EditText) {
@@ -80,10 +88,22 @@ class AddPlaceFragment : Fragment() {
         }
     }
 
-    fun selectPlaceLocation() {
-        //TODO: figure out how to launch gmaps and get latlong
+    private fun selectPlaceLocation() {
         findNavController().navigate(R.id.action_addPlaceFragment_to_placesChooseLocationFragment)
+    }
 
+    private fun setUploadStateListener() {
+        val uploadStateObserver = Observer<UploadState> { state ->
+            if (state == UploadState.Success) {
+                Toast.makeText(view!!.context, "Dodato je novo mesto.", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.action_addPlaceFragment_to_nav_places)
+            } else {
+                if (state is UploadState.UploadError) {
+                    Toast.makeText(view!!.context, state.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        viewModel.uploadState.observe(viewLifecycleOwner, uploadStateObserver)
     }
 
     override fun onDestroyView() {
