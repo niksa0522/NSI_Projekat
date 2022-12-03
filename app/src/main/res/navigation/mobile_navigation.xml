@@ -31,9 +31,7 @@
         tools:layout="@layout/fragment_places_list">
         <action
             android:id="@+id/action_nav_places_to_addPlaceFragment"
-            app:destination="@id/addPlaceFragment"
-            app:popUpTo="@id/nav_places"
-            app:popUpToInclusive="true" />
+            app:destination="@id/addPlaceFragment" />
     </fragment>
 
     <fragment
