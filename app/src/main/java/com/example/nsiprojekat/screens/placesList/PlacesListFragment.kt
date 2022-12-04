@@ -45,10 +45,13 @@ class PlacesListFragment : Fragment(), PlacesAdapter.ClickInterface {
             .build()
 
         adapter = PlacesAdapter(options, this)
+
+        if (viewModel.distanceFilterOn.value!! && viewModel.currentLocation != null) {
+            adapter.setRadiusFilter(viewModel.placeDistanceFilter.value!!.toDouble(), viewModel.currentLocation!!)
+        }
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerPlaces)
         recyclerView.adapter = adapter
 
-        //Log.d("PLACES", "Place count: ${adapter.snapshots.size}")
 
         binding.fabFilters.setOnClickListener {
             findNavController().navigate(R.id.action_nav_places_to_placeFiltersFragment)
@@ -57,5 +60,10 @@ class PlacesListFragment : Fragment(), PlacesAdapter.ClickInterface {
 
     override fun onClicked(id: String) {
         Toast.makeText(requireContext(), "Place with id: $id", Toast.LENGTH_SHORT).show()
+        val place = adapter.snapshots.find { place -> place.id == id }
+        if (place != null) {
+            viewModel.selectedPlace = place
+            findNavController().navigate(R.id.action_nav_places_to_placeDetailsFragment)
+        }
     }
 }

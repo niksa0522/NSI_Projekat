@@ -35,6 +35,10 @@
         <action
             android:id="@+id/action_nav_places_to_placeFiltersFragment"
             app:destination="@id/placeFiltersFragment" />
+
+        <action
+            android:id="@+id/action_nav_places_to_placeDetailsFragment"
+            app:destination="@id/placeDetailsFragment" />
     </fragment>
 
     <fragment
@@ -78,6 +82,18 @@
         tools:layout="@layout/fragment_place_filters">
         <action
             android:id="@+id/action_placeFiltersFragment_to_nav_places"
+            app:destination="@id/nav_places"
+            app:popUpTo="@id/nav_places"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/placeDetailsFragment"
+        android:name="com.example.nsiprojekat.screens.placeDetails.PlaceDetailsFragment"
+        android:label="Place Details"
+        tools:layout="@layout/fragment_place_details">
+        <action
+            android:id="@+id/action_placeDetailsFragment_to_nav_places"
             app:destination="@id/nav_places"
             app:popUpTo="@id/nav_places"
             app:popUpToInclusive="true"/>

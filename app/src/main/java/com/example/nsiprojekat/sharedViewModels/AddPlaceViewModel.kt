@@ -34,7 +34,6 @@ class AddPlaceViewModel : ViewModel() {
 
     fun onPlaceNameTextChanged(p0: Editable?) {
         _placeName.value = p0.toString()
-        //Log.d("ADDPLACEVM", p0.toString())
     }
 
     fun onPlaceLatTextChanged(p0: Editable) {
@@ -87,6 +86,14 @@ class AddPlaceViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    fun resetAddPlace() {
+        _uploadState.value = UploadState.Idle
+        _placeLat.value = ""
+        _placeLong.value = ""
+        _placeName.value = ""
+        _picture.value = null
     }
 
     private fun checkData(): Boolean {

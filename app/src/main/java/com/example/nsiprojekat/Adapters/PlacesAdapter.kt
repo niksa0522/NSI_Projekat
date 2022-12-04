@@ -18,8 +18,9 @@ class PlacesAdapter(options: FirestoreRecyclerOptions<Place>, private val listen
     options
 ) {
     private var radius = 0.0
-    private var shouldTrimDistance = true
+    private var shouldTrimDistance = false
     private var placesList: List<Place> = listOf()
+    private var location: LatLng? = null
 
     interface ClickInterface{
         fun onClicked(id:String)
@@ -71,12 +72,15 @@ class PlacesAdapter(options: FirestoreRecyclerOptions<Place>, private val listen
         super.onDataChanged()
         if (shouldTrimDistance) {
             placesList = snapshots.toList()
-            placesList = trimByDistance(placesList, LatLng(43.32142803169382, 21.896256878972054), 500.0)
+            if (location != null) {
+                placesList = trimByDistance(placesList, location!!, radius)
+            }
         }
     }
 
-    fun setRadiusFilter(r: Double) {
+    fun setRadiusFilter(r: Double, loc: LatLng) {
         radius = r
+        location = loc
         shouldTrimDistance = true
         placesList = snapshots.toList()
     }

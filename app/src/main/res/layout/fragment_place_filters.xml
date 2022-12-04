@@ -36,7 +36,8 @@
             android:text="@string/enable_search_by_name"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintTop_toTopOf="@+id/guideline6"
-            android:onCheckedChanged="@{ () -> data.onNameFilterCheckedChanged()}"/>
+            android:onCheckedChanged="@{ () -> data.onNameFilterCheckedChanged()}"
+            android:checked="@{ data.nameFilterOn.booleanValue() }" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/nameFilter"
@@ -73,7 +74,8 @@
             android:text="@string/enable_search_by_distance"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintTop_toBottomOf="@+id/guideline4"
-            android:onCheckedChanged="@{ () -> data.onDistanceFilterCheckedChanged()}" />
+            android:onCheckedChanged="@{ () -> data.onDistanceFilterCheckedChanged()}"
+            android:checked="@{ data.distanceFilterOn.booleanValue() }" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/placeLat"
