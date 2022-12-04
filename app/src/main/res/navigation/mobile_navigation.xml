@@ -10,22 +10,10 @@
         android:name="com.example.nsiprojekat.screens.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
-
-    <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.nsiprojekat.screens.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.nsiprojekat.screens.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
     <fragment
         android:id="@+id/nav_chat"
         android:name="com.example.nsiprojekat.screens.chatMain.ChatMainFragment"
-        android:label="fragment_chat_main"
+        android:label="Caskanja"
         tools:layout="@layout/fragment_chat_main" >
         <action
             android:id="@+id/action_nav_chat_to_chatWithFriendFragment"
@@ -34,12 +22,17 @@
     <fragment
         android:id="@+id/chatWithFriendFragment"
         android:name="com.example.nsiprojekat.screens.chatWithFriend.ChatWithFriendFragment"
-        android:label="fragment_chat_with_friend"
+        android:label="Chat"
         tools:layout="@layout/fragment_chat_with_friend" >
         <argument
             android:name="uid"
             app:argType="string"
             android:defaultValue='""' />
     </fragment>
+    <fragment
+        android:id="@+id/nav_remote"
+        android:name="com.example.nsiprojekat.screens.remote.RemoteConfigFragment"
+        android:label="Remote Config"
+        tools:layout="@layout/fragment_remote_config" />
 
 </navigation>

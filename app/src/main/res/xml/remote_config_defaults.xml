@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<defaults>
+  <entry>
+    <key>loading_phrase</key>
+    <value>loading...</value>
+  </entry>
+  <entry>
+    <key>welcome_message</key>
+    <value>welcome</value>
+  </entry>
+  <entry>
+    <key>welcome_message_caps</key>
+    <value>false</value>
+  </entry>
+</defaults>

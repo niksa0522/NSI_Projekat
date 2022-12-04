@@ -15,13 +15,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.paging.PagingConfig
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.nsiprojekat.Adapters.ChatAdapter
+import com.example.nsiprojekat.Firebase.RealtimeModels.Message
 import com.example.nsiprojekat.databinding.FragmentChatWithFriendBinding
 import com.example.nsiprojekat.sharedViewModels.AuthState
+import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.firebase.ui.database.paging.DatabasePagingOptions
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import java.io.FileDescriptor
 import java.io.IOException
 
-class ChatWithFriendFragment : Fragment() {
+class ChatWithFriendFragment : Fragment(),ChatAdapter.ChatInterface {
 
     private val viewModel: ChatWithFriendViewModel by viewModels()
     private var _binding: FragmentChatWithFriendBinding?= null
@@ -36,7 +43,8 @@ class ChatWithFriendFragment : Fragment() {
         val root: View = binding.root
 
         val uid = arguments?.getString("uid")
-        if(uid!=null && uid!=null)
+        //val myUid = Firebase.auth.uid
+        if(uid!=null /*&& myUid!=null*/)
             viewModel.getChat(uid)
         return root
     }
@@ -44,11 +52,17 @@ class ChatWithFriendFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val layoutManager = LinearLayoutManager(context)
+        layoutManager.stackFromEnd=true
+        binding.recyclerMessages.layoutManager = layoutManager
+
         viewModel.message.observe(viewLifecycleOwner){
             if(it.size>0){
                 var list = it
                 //mozda obrnuti listu
                 if(adapter==null){
+
+
                     adapter= ChatAdapter()
                     binding.recyclerMessages.adapter=adapter
                 }
@@ -56,6 +70,14 @@ class ChatWithFriendFragment : Fragment() {
                 binding.recyclerMessages.smoothScrollToPosition(adapter!!.itemCount)
             }
         }
+
+        //TODO prikazi razliku izmedju adaptera za prezentaciju
+        /*val options = FirebaseRecyclerOptions.Builder<Message>().setQuery(viewModel.getQuery(),Message::class.java).setLifecycleOwner(viewLifecycleOwner).build()
+
+        binding.recyclerMessages.itemAnimator = null
+        adapter = ChatAdapter(options,this)
+        binding.recyclerMessages.adapter = adapter*/
+
         viewModel.name.observe(viewLifecycleOwner){
             (activity as AppCompatActivity).supportActionBar?.title = it
         }
@@ -69,7 +91,6 @@ class ChatWithFriendFragment : Fragment() {
                 viewModel.sendMessage(binding.messageEditText.text.toString())
                 binding.messageEditText.setText("")
             }
-
         }
     }
     private fun selectImage(){
@@ -84,7 +105,7 @@ class ChatWithFriendFragment : Fragment() {
             if (uri != null) {
                 val picture: Bitmap? = uriToBitmap(uri)
                 if (picture != null) {
-                    viewModel.setPicture(picture,uri.lastPathSegment)
+                    viewModel.setPicture(picture,uri.lastPathSegment,)
                 }
             }
         }
@@ -119,6 +140,10 @@ class ChatWithFriendFragment : Fragment() {
         super.onDestroyView()
         viewModel.authState.removeObservers(viewLifecycleOwner)
         _binding = null
+    }
+
+    override fun onMessageAdded() {
+        binding.recyclerMessages.smoothScrollToPosition(adapter!!.itemCount)
     }
 
 }

@@ -9,8 +9,10 @@ import com.example.nsiprojekat.Models.ChatRequestWithKey
 import com.example.nsiprojekat.Models.FriendWithKey
 import com.example.nsiprojekat.databinding.ItemFriendBinding
 import com.example.nsiprojekat.databinding.ItemRequestBinding
+import com.firebase.ui.database.FirebaseRecyclerAdapter
+import com.firebase.ui.database.FirebaseRecyclerOptions
 
-class FriendListAdapter(private val listener:FriendClickInterface) : RecyclerView.Adapter<FriendListAdapter.ViewHolder>() {
+class FriendListAdapter(val options: FirebaseRecyclerOptions<FriendWithKey>,private val listener:FriendClickInterface) : FirebaseRecyclerAdapter<FriendWithKey,FriendListAdapter.ViewHolder>(options) {
 
     interface FriendClickInterface{
         fun onFriendClicked(friendUid:String)
@@ -30,7 +32,7 @@ class FriendListAdapter(private val listener:FriendClickInterface) : RecyclerVie
         return FriendListAdapter.ViewHolder(itemBinding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    /*override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.userName.text = friends[position].friend.displayName
         Glide.with(holder.itemView.context).load(friends[position].friend.profilePicURl).into(holder.binding.profilePic)
         holder.binding.root.rootView.setOnClickListener{
@@ -40,6 +42,14 @@ class FriendListAdapter(private val listener:FriendClickInterface) : RecyclerVie
 
     override fun getItemCount(): Int {
         return friends.size
+    }*/
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, model: FriendWithKey) {
+        holder.binding.userName.text = model.friend.displayName
+        Glide.with(holder.itemView.context).load(model.friend.profilePicURl).into(holder.binding.profilePic)
+        holder.binding.root.rootView.setOnClickListener{
+            listener.onFriendClicked(model.key)
+        }
     }
 
 }

@@ -15,6 +15,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.Query
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
@@ -52,5 +54,9 @@ class ChatListViewModel : ViewModel() {
                 }
             })
         }
+    }
+    fun getQuery(): Query {
+        val uid = auth.uid
+        return mDatabase.reference.child("friends").child(uid!!)
     }
 }
