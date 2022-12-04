@@ -32,6 +32,9 @@
         <action
             android:id="@+id/action_nav_places_to_addPlaceFragment"
             app:destination="@id/addPlaceFragment" />
+        <action
+            android:id="@+id/action_nav_places_to_placeFiltersFragment"
+            app:destination="@id/placeFiltersFragment" />
     </fragment>
 
     <fragment
@@ -66,6 +69,18 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="400dp" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/placeFiltersFragment"
+        android:name="com.example.nsiprojekat.screens.placesFilters.PlaceFiltersFragment"
+        android:label="Choose Place Location"
+        tools:layout="@layout/fragment_place_filters">
+        <action
+            android:id="@+id/action_placeFiltersFragment_to_nav_places"
+            app:destination="@id/nav_places"
+            app:popUpTo="@id/nav_places"
+            app:popUpToInclusive="true"/>
     </fragment>
 
     <!--    places feature izmene   -->

@@ -1,16 +1,11 @@
 package com.example.nsiprojekat.sharedViewModels
 
 import android.graphics.Bitmap
-import android.net.Uri
 import android.text.Editable
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.nsiprojekat.Firebase.FirestoreModels.Place
-import com.example.nsiprojekat.Firebase.RealtimeModels.User
-import com.google.firebase.auth.ktx.userProfileChangeRequest
-import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
@@ -20,7 +15,7 @@ import java.util.UUID
 
 class AddPlaceViewModel : ViewModel() {
 
-    val db = Firebase.firestore
+    private val db = Firebase.firestore
 
     private val _uploadState = MutableLiveData<UploadState>()
     val uploadState: LiveData<UploadState> = _uploadState
@@ -31,7 +26,6 @@ class AddPlaceViewModel : ViewModel() {
     private val _picture = MutableLiveData<Bitmap>()
     val picture: LiveData<Bitmap> = _picture
 
-    //FIXME: ovo treba da se preuredi!!!
     private val _placeLat = MutableLiveData<String>()
     val placeLat: LiveData<String> = _placeLat
     private val _placeLong = MutableLiveData<String>()
@@ -80,7 +74,7 @@ class AddPlaceViewModel : ViewModel() {
             }.addOnCompleteListener{task ->
                 if(task.isSuccessful){
                     val imageUrl = task.result.toString()
-                    val place = Place(uuid, _placeName.value, _placeLat.value, _placeLong.value, imageUrl)
+                    val place = Place(uuid, _placeName.value, _placeLat.value, _placeLong.value, imageUrl, makeSubstrings(_placeName.value!!))
                     db.collection("places").document(uuid)
                         .set(place)
                         .addOnSuccessListener {
@@ -113,6 +107,21 @@ class AddPlaceViewModel : ViewModel() {
             return false
         }
         return true
+    }
+
+    private fun makeSubstrings(string: String): List<String> {
+        val size = string.length
+        val substrings: MutableList<String> = mutableListOf()
+        for (substringSize in 1..size) {
+            for (startIndex in 0 until size) {
+                if (startIndex + substringSize > size) {
+                    break
+                }
+                val substr = string.substring(startIndex, startIndex + substringSize)
+                substrings.add(substr)
+            }
+        }
+        return substrings
     }
 }
 

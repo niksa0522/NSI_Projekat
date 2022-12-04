@@ -7,26 +7,33 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nsiprojekat.Adapters.PlacesAdapter
 import com.example.nsiprojekat.Firebase.FirestoreModels.Place
 import com.example.nsiprojekat.R
+import com.example.nsiprojekat.databinding.FragmentPlacesListBinding
+import com.example.nsiprojekat.sharedViewModels.PlacesListViewModel
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.firebase.ui.firestore.SnapshotParser
 
 
 class PlacesListFragment : Fragment(), PlacesAdapter.ClickInterface {
 
-    private val viewModel: PlacesListViewModel by viewModels()
+    private val viewModel: PlacesListViewModel by activityViewModels()
     private lateinit var options: FirestoreRecyclerOptions<Place>
     private lateinit var adapter: PlacesAdapter
+
+    private var _binding: FragmentPlacesListBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_places_list, container, false)
+    ): View {
+        _binding = FragmentPlacesListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,7 +48,11 @@ class PlacesListFragment : Fragment(), PlacesAdapter.ClickInterface {
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerPlaces)
         recyclerView.adapter = adapter
 
-        Log.d("PLACES", "Place count: ${adapter.snapshots.size}")
+        //Log.d("PLACES", "Place count: ${adapter.snapshots.size}")
+
+        binding.fabFilters.setOnClickListener {
+            findNavController().navigate(R.id.action_nav_places_to_placeFiltersFragment)
+        }
     }
 
     override fun onClicked(id: String) {

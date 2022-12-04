@@ -30,5 +30,8 @@
     <string name="mapLabel">Izbor lokacije</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="enable_search_by_name">Enable search by name</string>
+    <string name="enable_search_by_distance">Enable search by distance</string>
+    <string name="set_filters">Set filters</string>
     <!-- meetup places izmene -->
 </resources>
