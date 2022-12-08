@@ -49,6 +49,7 @@ class PlaceFiltersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.data = viewModel
+        binding.cbNameFilter.isChecked = viewModel.nameFilterOn.value!!
 
         val placeNameFilterET = binding.etPlaceNameFilter
         val placeDistanceFilterET = binding.etPlaceDistanceFilter

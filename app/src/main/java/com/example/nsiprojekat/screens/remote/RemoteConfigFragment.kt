@@ -40,14 +40,14 @@ class RemoteConfigFragment : Fragment() {
 
         binding.fetchButton.setOnClickListener { fetchWelcome() }
 
-        remoteConfig = Firebase.remoteConfig
-
-        val configSettings = remoteConfigSettings {
-            minimumFetchIntervalInSeconds = 1
-        }
-        remoteConfig.setConfigSettingsAsync(configSettings)
-
-        remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
+//        remoteConfig = Firebase.remoteConfig
+//
+//        val configSettings = remoteConfigSettings {
+//            minimumFetchIntervalInSeconds = 1
+//        }
+//        remoteConfig.setConfigSettingsAsync(configSettings)
+//
+//        remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
         fetchWelcome()
     }
 

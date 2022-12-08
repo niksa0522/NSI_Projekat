@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <defaults>
   <entry>
+    <key>banner_image</key>
+    <value>https://d20aeo683mqd6t.cloudfront.net/articles/title_images/000/040/775/original/japanese-flag_b.png</value>
+  </entry>
+  <entry>
+    <key>welcome_message_caps</key>
+    <value>true</value>
+  </entry>
+  <entry>
     <key>loading_phrase</key>
     <value>loading...</value>
   </entry>
   <entry>
     <key>welcome_message</key>
     <value>welcome</value>
-  </entry>
-  <entry>
-    <key>welcome_message_caps</key>
-    <value>false</value>
   </entry>
 </defaults>

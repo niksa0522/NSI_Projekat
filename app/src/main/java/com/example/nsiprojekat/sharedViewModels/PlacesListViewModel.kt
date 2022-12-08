@@ -49,7 +49,7 @@ class PlacesListViewModel : ViewModel() {
     }
 
     fun setNameQuery() {
-        if (placeNameFilter.value != null) {
+        if (placeNameFilter.value != null && _nameFilterOn.value!!) {
             query = db.collection("places").orderBy("name").whereArrayContains("nameQueryList", placeNameFilter.value!!)
         }
     }

@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 
         //region places feature izmene
         appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.nav_home,R.id.nav_chat,R.id.nav_remote, R.id.nav_places
+            R.id.nav_home,R.id.nav_chat,R.id.nav_remote, R.id.nav_places, R.id.nav_crash
         ), drawerLayout)
         //endregion
         setupActionBarWithNavController(navController, appBarConfiguration)

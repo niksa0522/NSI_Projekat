@@ -5,6 +5,8 @@ plugins {
     id 'kotlin-kapt'
     id 'com.google.gms.google-services'
 
+    id 'com.google.firebase.crashlytics'
+
 
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 
@@ -74,6 +76,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database-ktx'
     implementation 'com.google.firebase:firebase-config-ktx'
     implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
 
     implementation 'com.github.bumptech.glide:glide:4.14.2'
 

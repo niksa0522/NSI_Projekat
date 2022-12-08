@@ -20,5 +20,9 @@
             android:id="@+id/nav_places"
             android:icon="@android:drawable/ic_dialog_map"
             android:title="@string/menu_places" />
+        <item
+            android:id="@+id/nav_crash"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/crashButton" />
     </group>
 </menu>
