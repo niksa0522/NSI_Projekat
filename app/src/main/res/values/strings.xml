@@ -22,10 +22,18 @@
     <string name="btnLogin">Prijavi se</string>
     <string name="tVReg">Registruj se</string>
     <string name="tVSignOut">Odjavi se</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hint_Email">Email</string>
     <string name="menu_chat">Caskanje</string>
     <string name="fetch_remote_welcome_message">fetch remote welcome</string>
     <string name="menu_remote">Remote</string>
+
+    <string name="menu_places">Places</string>
+    <string name="btnAddPlace">Dodaj mesto</string>
+    <string name="btnSelectLocation">Izaberi lokaciju na mapi</string>
+    <string name="mapLabel">Izbor lokacije</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="enable_search_by_name">Enable search by name</string>
+    <string name="enable_search_by_distance">Enable search by distance</string>
+    <string name="set_filters">Set filters</string>
+    <!-- meetup places izmene -->
 </resources>
