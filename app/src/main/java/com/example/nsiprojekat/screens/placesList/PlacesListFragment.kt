@@ -52,9 +52,12 @@ class PlacesListFragment : Fragment(), PlacesAdapter.ClickInterface {
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerPlaces)
         recyclerView.adapter = adapter
 
-
         binding.fabFilters.setOnClickListener {
             findNavController().navigate(R.id.action_nav_places_to_placeFiltersFragment)
+        }
+
+        binding.fab.setOnClickListener {
+            findNavController().navigate(R.id.action_nav_places_to_addPlaceFragment)
         }
     }
 

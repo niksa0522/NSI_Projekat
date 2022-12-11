@@ -1,12 +1,15 @@
 package com.example.nsiprojekat.activites
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -20,14 +23,27 @@ import com.example.nsiprojekat.R
 import com.example.nsiprojekat.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.bumptech.glide.Glide
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var auth: FirebaseAuth
+
+    // Declare the launcher at the top of your Activity/Fragment:
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // FCM SDK (and your app) can post notifications.
+        } else {
+            // TODO: Inform user that that your app will not show notifications.
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,32 +54,13 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        //region places feature izmene
         val navController = findNavController(R.id.nav_host_fragment_content_main)
-        navController.addOnDestinationChangedListener{ controller, destination, arguments ->
-            if (destination.id == R.id.nav_places)
-                binding.appBarMain.fab.show()
-            else
-                binding.appBarMain.fab.hide()
-        }
-
-        binding.appBarMain.fab.setOnClickListener { view ->
-            if (navController.currentDestination!!.id == R.id.nav_places) {
-                navController.navigate(R.id.action_nav_places_to_addPlaceFragment)
-            }
-        }
-        //endregion
-
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
 
-        //region places feature izmene
         appBarConfiguration = AppBarConfiguration(setOf(
             R.id.nav_home,R.id.nav_chat,R.id.nav_remote, R.id.nav_places, R.id.nav_crash
         ), drawerLayout)
-        //endregion
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
@@ -76,13 +73,22 @@ class MainActivity : AppCompatActivity() {
         val tvLogout: TextView = binding.tVlogout
         tvLogout.setOnClickListener{Logout()}
 
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-    }
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
-        return true
+        Firebase.messaging.token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("MAIN", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            val msg = getString(R.string.msg_token_fmt, token)
+            Log.d("MAIN", msg)
+            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+        })
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -95,5 +101,11 @@ class MainActivity : AppCompatActivity() {
         i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(i)
         finish()
+    }
+
+    fun runtimeEnableAutoInit() {
+        // [START fcm_runtime_enable_auto_init]
+        Firebase.messaging.isAutoInitEnabled = true
+        // [END fcm_runtime_enable_auto_init]
     }
 }
