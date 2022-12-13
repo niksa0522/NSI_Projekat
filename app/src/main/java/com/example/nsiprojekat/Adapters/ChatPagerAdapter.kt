@@ -9,7 +9,7 @@ import com.example.nsiprojekat.screens.friendsRequests.FriendsRequestsFragment
 class ChatPagerAdapter(private val fa:Fragment): FragmentStateAdapter(fa) {
 
     private val fragments = listOf<Fragment>(ChatListFragment(),FriendsRequestsFragment())
-    public val fragmentNames = listOf<String>("Ćaskanja","Zahtevi za ćaskanja")
+    public val fragmentNames = listOf<String>("Chats","Chat requests")
 
     override fun getItemCount(): Int {
         return fragments.size

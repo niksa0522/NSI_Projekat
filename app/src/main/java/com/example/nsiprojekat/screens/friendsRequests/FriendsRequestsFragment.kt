@@ -63,7 +63,7 @@ class FriendsRequestsFragment : Fragment(),RequestsAdapter.RequestClickInterface
                 viewModel.sendRequest(binding.etEmail.text.toString())
             }
             else{
-                Toast.makeText(requireContext(),"Unesi email!",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),"Enter email!",Toast.LENGTH_SHORT).show()
             }
         }
 

@@ -95,7 +95,7 @@ class AddPlaceFragment : Fragment() {
     private fun setUploadStateListener() {
         val uploadStateObserver = Observer<UploadState> { state ->
             if (state == UploadState.Success) {
-                Toast.makeText(view!!.context, "Dodato je novo mesto.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(view!!.context, "New place has been added.", Toast.LENGTH_SHORT).show()
                 viewModel.resetAddPlace()
                 findNavController().navigate(R.id.action_addPlaceFragment_to_nav_places)
             } else {

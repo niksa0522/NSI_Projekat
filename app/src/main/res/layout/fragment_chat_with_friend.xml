@@ -66,8 +66,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/guidelineRight"
             app:layout_constraintTop_toTopOf="parent"
-            android:textColor="@color/white"
-            android:text="Posalji" />
+            android:text="@string/send" />
 
         <EditText
             android:id="@+id/messageEditText"

@@ -61,7 +61,7 @@ class FriendsRequestsViewModel : ViewModel() {
 
     fun sendRequest(email:String){
         if(email.equals(auth.currentUser!!.email)){
-            _requestMessage.value="Uneli ste vasu email adresu"
+            _requestMessage.value="You have enter your email address"
         }
         mDatabase.reference.child("emails").orderByChild("value").equalTo(email).limitToFirst(1).get().addOnCompleteListener() {
             if(it.isSuccessful){
@@ -80,7 +80,7 @@ class FriendsRequestsViewModel : ViewModel() {
                 }
             }
             else{
-                _requestMessage.value="Nema korisnik sa ovom email adresom"
+                _requestMessage.value="No user exists with this email address"
             }
         }
     }

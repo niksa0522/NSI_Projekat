@@ -62,7 +62,7 @@ class PlacesListFragment : Fragment(), PlacesAdapter.ClickInterface {
     }
 
     override fun onClicked(id: String) {
-        Toast.makeText(requireContext(), "Place with id: $id", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(requireContext(), "Place with id: $id", Toast.LENGTH_SHORT).show()
         val place = adapter.snapshots.find { place -> place.id == id }
         if (place != null) {
             viewModel.selectedPlace = place

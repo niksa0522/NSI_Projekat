@@ -13,7 +13,7 @@
     <fragment
         android:id="@+id/nav_chat"
         android:name="com.example.nsiprojekat.screens.chatMain.ChatMainFragment"
-        android:label="Caskanja"
+        android:label="Chat"
         tools:layout="@layout/fragment_chat_main" >
         <action
             android:id="@+id/action_nav_chat_to_chatWithFriendFragment"
@@ -112,7 +112,7 @@
     <fragment
         android:id="@+id/nav_crash"
         android:name="com.example.nsiprojekat.screens.crashlytics.CrashFragment"
-        android:label="fragment_crash"
+        android:label="Crashlytics"
         tools:layout="@layout/fragment_crash" />
 
 </navigation>

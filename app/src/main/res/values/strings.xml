@@ -13,24 +13,24 @@
 
 
     <string name="hint_kI">Email</string>
-    <string name="hint_pW">Sifra</string>
-    <string name="hint_FName">Ime</string>
-    <string name="hint_LName">Prezime</string>
-    <string name="btnReg">Registruj Se</string>
-    <string name="tVlogin">Prijavi se</string>
-    <string name="btnAddPicture">Dodaj Sliku</string>
-    <string name="btnLogin">Prijavi se</string>
-    <string name="tVReg">Registruj se</string>
-    <string name="tVSignOut">Odjavi se</string>
+    <string name="hint_pW">Password</string>
+    <string name="hint_FName">First Name</string>
+    <string name="hint_LName">Last Name</string>
+    <string name="btnReg">Sign In</string>
+    <string name="tVlogin">Login</string>
+    <string name="btnAddPicture">Add Picture</string>
+    <string name="btnLogin">Login</string>
+    <string name="tVReg">Sign In</string>
+    <string name="tVSignOut">Logout</string>
     <string name="hint_Email">Email</string>
-    <string name="menu_chat">Caskanje</string>
+    <string name="menu_chat">Chat</string>
     <string name="fetch_remote_welcome_message">fetch remote welcome</string>
     <string name="menu_remote">Remote</string>
 
     <string name="menu_places">Places</string>
-    <string name="btnAddPlace">Dodaj mesto</string>
-    <string name="btnSelectLocation">Izaberi lokaciju na mapi</string>
-    <string name="mapLabel">Izbor lokacije</string>
+    <string name="btnAddPlace">Add place</string>
+    <string name="btnSelectLocation">Choose location on map</string>
+    <string name="mapLabel">Choose location</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="enable_search_by_name">Enable search by name</string>
     <string name="enable_search_by_distance">Enable search by distance</string>
@@ -38,4 +38,9 @@
     <string name="crashButton">Crash</string>
 
     <string name="msg_token_fmt" translatable="false">FCM registration Token: %s</string>
+    <string name="place_name">Place Name</string>
+    <string name="send">Send</string>
+    <string name="sendRequest">Send chat request</string>
+    <string name="acceptBtn">Accept</string>
+    <string name="denyBtn">Deny</string>
 </resources>

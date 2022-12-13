@@ -39,7 +39,7 @@ class RemoteConfigFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.fetchButton.setOnClickListener { fetchWelcome() }
-
+        remoteConfig = Firebase.remoteConfig
 //        remoteConfig = Firebase.remoteConfig
 //
 //        val configSettings = remoteConfigSettings {

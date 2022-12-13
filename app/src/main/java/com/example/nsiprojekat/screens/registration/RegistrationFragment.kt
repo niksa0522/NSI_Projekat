@@ -23,6 +23,11 @@ import com.example.nsiprojekat.sharedViewModels.LoginRegistrationViewModel
 import com.example.nsiprojekat.databinding.FragmentRegistrationBinding
 import com.example.nsiprojekat.helpers.PermissionHelper
 import com.example.nsiprojekat.sharedViewModels.AuthState
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class RegistrationFragment : Fragment() {
 
@@ -106,6 +111,14 @@ class RegistrationFragment : Fragment() {
             if (state == AuthState.Success) {
                 val i: Intent = Intent(activity, MainActivity::class.java)
                 i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+
+                val analytics = Firebase.analytics
+                val auth = Firebase.auth
+                analytics.setUserId(auth.uid)
+                val bundle = Bundle()
+                bundle.putString(FirebaseAnalytics.Param.METHOD, "firebaseAuth")
+                analytics.logEvent(FirebaseAnalytics.Event.LOGIN, bundle)
+
                 activity!!.startActivity(i)
                 activity!!.finish()
             } else {

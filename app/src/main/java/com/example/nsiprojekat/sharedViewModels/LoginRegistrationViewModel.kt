@@ -147,27 +147,27 @@ class LoginRegistrationViewModel : ViewModel() {
     private fun checkData(login: Boolean):Boolean{
         if(email.value == null || email.value == "")
         {
-            _authState.value = AuthState.AuthError("Unesi Email!")
+            _authState.value = AuthState.AuthError("Enter Email!")
             return false
         }
         if(password.value == null || password.value == "")
         {
-            _authState.value = AuthState.AuthError("Unesi Lozinku!")
+            _authState.value = AuthState.AuthError("Enter password!")
             return false
         }
         if(!login){
             if(fName.value == null || fName.value == "")
             {
-                _authState.value = AuthState.AuthError("Unesi Ime!")
+                _authState.value = AuthState.AuthError("Enter First Name!")
                 return false
             }
             if(lName.value == null || lName.value == "")
             {
-                _authState.value = AuthState.AuthError("Unesi Prezime!")
+                _authState.value = AuthState.AuthError("Enter Last Name!")
                 return false
             }
             if(picture.value == null){
-                _authState.value = AuthState.AuthError("Potrebna je slika!")
+                _authState.value = AuthState.AuthError("Picture is needed!")
                 return false
             }
         }
