@@ -46,10 +46,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="3dp"
         android:background="@drawable/chat_border"
         android:padding="10dp"
-        android:textColor="?attr/colorOnPrimary"
         android:text="sender messages here"
+        android:textColor="?attr/colorOnPrimary"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
