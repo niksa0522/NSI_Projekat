@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.nsiprojekat.Firebase.FirestoreModels.Place
+import com.example.nsiprojekat.helpers.ActionState
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -31,6 +32,9 @@ class PlacesListViewModel : ViewModel() {
 
     var currentLocation: LatLng? = null
     var selectedPlace: Place? = null
+
+    private val _deleteState = MutableLiveData<ActionState>(ActionState.Idle)
+    val deleteState: LiveData<ActionState> = _deleteState
 
     fun onPlaceNameFilterChanged(p0: Editable?) {
         _placeNameFilter.value = p0.toString()
@@ -65,12 +69,22 @@ class PlacesListViewModel : ViewModel() {
         return auth.currentUser!!.uid == selectedPlace!!.creatorId
     }
 
-    fun editPlace() {
-        //TODO: implement
+    fun editPlace(place: Place) {
+//        db.collection("places").document(selectedPlace!!.id!!).set(place)
+//            .addOnSuccessListener {  }
+//            .addOnFailureListener {  }
+
     }
 
     fun deletePlace() {
         //TODO: implement
+        db.collection("places").document(selectedPlace!!.id!!).delete()
+            .addOnSuccessListener { _deleteState.value = ActionState.Success }
+            .addOnFailureListener { _deleteState.value = ActionState.ActionError(it.message) }
+    }
+
+    fun resetDeleteState() {
+        _deleteState.value = ActionState.Idle
     }
 
 }

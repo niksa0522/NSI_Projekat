@@ -19,11 +19,9 @@ import androidx.lifecycle.Observer
 import com.example.nsiprojekat.R
 import com.example.nsiprojekat.databinding.FragmentAddPlaceBinding
 import androidx.navigation.fragment.findNavController
-import com.example.nsiprojekat.activites.MainActivity
+import com.example.nsiprojekat.helpers.ActionState
 import com.example.nsiprojekat.helpers.PermissionHelper
 import com.example.nsiprojekat.sharedViewModels.AddPlaceViewModel
-import com.example.nsiprojekat.sharedViewModels.AuthState
-import com.example.nsiprojekat.sharedViewModels.UploadState
 
 class AddPlaceFragment : Fragment() {
 
@@ -93,18 +91,18 @@ class AddPlaceFragment : Fragment() {
     }
 
     private fun setUploadStateListener() {
-        val uploadStateObserver = Observer<UploadState> { state ->
-            if (state == UploadState.Success) {
+        val actionStateObserver = Observer<ActionState> { state ->
+            if (state == ActionState.Success) {
                 Toast.makeText(view!!.context, "New place has been added.", Toast.LENGTH_SHORT).show()
                 viewModel.resetAddPlace()
                 findNavController().navigate(R.id.action_addPlaceFragment_to_nav_places)
             } else {
-                if (state is UploadState.UploadError) {
+                if (state is ActionState.ActionError) {
                     Toast.makeText(view!!.context, state.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
-        viewModel.uploadState.observe(viewLifecycleOwner, uploadStateObserver)
+        viewModel.actionState.observe(viewLifecycleOwner, actionStateObserver)
     }
 
     override fun onDestroyView() {

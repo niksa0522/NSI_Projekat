@@ -15,11 +15,10 @@ import androidx.navigation.fragment.findNavController
 import com.example.nsiprojekat.R
 import com.example.nsiprojekat.sharedViewModels.LoginRegistrationViewModel
 import com.example.nsiprojekat.databinding.FragmentLoginBinding
-import com.example.nsiprojekat.sharedViewModels.AuthState
 import com.example.nsiprojekat.activites.MainActivity
+import com.example.nsiprojekat.helpers.ActionState
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -69,13 +68,13 @@ class LoginFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        ViewModel.authState.removeObservers(viewLifecycleOwner)
+        ViewModel.actionState.removeObservers(viewLifecycleOwner)
         _binding = null
     }
 
     private fun setAuthStateObserver() {
-        val authStateObserver = Observer<AuthState> { state ->
-            if (state == AuthState.Success) {
+        val actionStateObserver = Observer<ActionState> { state ->
+            if (state == ActionState.Success) {
                 val i: Intent = Intent(activity, MainActivity::class.java)
 
                 val analytics = Firebase.analytics
@@ -90,12 +89,12 @@ class LoginFragment : Fragment() {
                 activity!!.finish()
             }
             else {
-                if (state is AuthState.AuthError) {
+                if (state is ActionState.ActionError) {
                     Toast.makeText(view!!.context, state.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
-        ViewModel.authState.observe(viewLifecycleOwner, authStateObserver)
+        ViewModel.actionState.observe(viewLifecycleOwner, actionStateObserver)
     }
 
 }

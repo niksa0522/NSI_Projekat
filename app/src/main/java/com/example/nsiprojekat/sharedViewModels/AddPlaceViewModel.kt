@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.nsiprojekat.Firebase.FirestoreModels.Place
+import com.example.nsiprojekat.helpers.ActionState
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -19,8 +20,8 @@ class AddPlaceViewModel : ViewModel() {
     private val db = Firebase.firestore
     private val auth = Firebase.auth
 
-    private val _uploadState = MutableLiveData<UploadState>()
-    val uploadState: LiveData<UploadState> = _uploadState
+    private val _actionState = MutableLiveData<ActionState>()
+    val actionState: LiveData<ActionState> = _actionState
 
     private val _placeName = MutableLiveData<String>()
     val placeName: LiveData<String> = _placeName
@@ -68,7 +69,7 @@ class AddPlaceViewModel : ViewModel() {
             val urlTask = uploadTask.continueWithTask{ task ->
                 if (!task.isSuccessful) {
                     task.exception?.let {
-                        _uploadState.value = UploadState.UploadError("Upload error: ${it.message}")
+                        _actionState.value = ActionState.ActionError("Upload error: ${it.message}")
                     }
                 }
                 imageRef.downloadUrl
@@ -79,11 +80,11 @@ class AddPlaceViewModel : ViewModel() {
                     db.collection("places").document(uuid)
                         .set(place)
                         .addOnSuccessListener {
-                            _uploadState.value = UploadState.Success
+                            _actionState.value = ActionState.Success
                         }
                         .addOnFailureListener { e ->
                             imageRef.delete()
-                            _uploadState.value = UploadState.UploadError("Upload error: ${e.message}")
+                            _actionState.value = ActionState.ActionError("Upload error: ${e.message}")
                         }
                 }
             }
@@ -91,7 +92,7 @@ class AddPlaceViewModel : ViewModel() {
     }
 
     fun resetAddPlace() {
-        _uploadState.value = UploadState.Idle
+        _actionState.value = ActionState.Idle
         _placeLat.value = ""
         _placeLong.value = ""
         _placeName.value = ""
@@ -100,19 +101,19 @@ class AddPlaceViewModel : ViewModel() {
 
     private fun checkData(): Boolean {
         if (_placeName.value!!.isBlank()) {
-            _uploadState.value = UploadState.UploadError("Uneti ime mesta!")
+            _actionState.value = ActionState.ActionError("Uneti ime mesta!")
             return false
         }
         if (_placeLat.value!!.isBlank()) {
-            _uploadState.value = UploadState.UploadError("Potreban je latitude!")
+            _actionState.value = ActionState.ActionError("Potreban je latitude!")
             return false
         }
         if (_placeLong.value!!.isBlank()) {
-            _uploadState.value = UploadState.UploadError("Potreban je longitude!")
+            _actionState.value = ActionState.ActionError("Potreban je longitude!")
             return false
         }
         if (_picture.value == null) {
-            _uploadState.value = UploadState.UploadError("Potrebna je slika!")
+            _actionState.value = ActionState.ActionError("Potrebna je slika!")
             return false
         }
         return true
@@ -126,10 +127,4 @@ class AddPlaceViewModel : ViewModel() {
         }
         return substrings
     }
-}
-
-sealed class UploadState {
-    object Idle : UploadState()
-    object Success : UploadState()
-    class UploadError(val message: String? = null) : UploadState()
 }

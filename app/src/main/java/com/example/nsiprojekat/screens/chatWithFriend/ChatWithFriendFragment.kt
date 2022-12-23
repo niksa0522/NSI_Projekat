@@ -15,16 +15,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.paging.PagingConfig
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.nsiprojekat.Adapters.ChatAdapter
-import com.example.nsiprojekat.Firebase.RealtimeModels.Message
 import com.example.nsiprojekat.databinding.FragmentChatWithFriendBinding
-import com.example.nsiprojekat.sharedViewModels.AuthState
-import com.firebase.ui.database.FirebaseRecyclerOptions
-import com.firebase.ui.database.paging.DatabasePagingOptions
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.example.nsiprojekat.helpers.ActionState
 import java.io.FileDescriptor
 import java.io.IOException
 
@@ -125,20 +119,20 @@ class ChatWithFriendFragment : Fragment(),ChatAdapter.ChatInterface {
     }
 
     private fun setAuthStateObserver() {
-        val authStateObserver = Observer<AuthState> { state ->
-            if (state == AuthState.Success) {
+        val actionStateObserver = Observer<ActionState> { state ->
+            if (state == ActionState.Success) {
                 //malo sam shit iskoristio ovo, ima potencijala za mnogo vise al jbg
             } else {
-                if (state is AuthState.AuthError) {
+                if (state is ActionState.ActionError) {
                     Toast.makeText(view!!.context, state.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
-        viewModel.authState.observe(viewLifecycleOwner, authStateObserver)
+        viewModel.actionState.observe(viewLifecycleOwner, actionStateObserver)
     }
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.authState.removeObservers(viewLifecycleOwner)
+        viewModel.actionState.removeObservers(viewLifecycleOwner)
         _binding = null
     }
 

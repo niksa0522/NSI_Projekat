@@ -4,12 +4,11 @@ import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.nsiprojekat.Adapters.ChatAdapter
 import com.example.nsiprojekat.Firebase.RealtimeModels.Friend
 import com.example.nsiprojekat.Firebase.RealtimeModels.Message
+import com.example.nsiprojekat.helpers.ActionState
 import com.example.nsiprojekat.helpers.LiveDataHelper.minusAssign
 import com.example.nsiprojekat.helpers.LiveDataHelper.plusAssign
-import com.example.nsiprojekat.sharedViewModels.AuthState
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -34,8 +33,8 @@ class ChatWithFriendViewModel : ViewModel() {
     private val _name = MutableLiveData<String>()
     val name: LiveData<String> = _name
 
-    private val _authState = MutableLiveData<AuthState>(AuthState.Idle)
-    val authState: LiveData<AuthState> = _authState
+    private val _actionState = MutableLiveData<ActionState>(ActionState.Idle)
+    val actionState: LiveData<ActionState> = _actionState
 
     private var picture: Bitmap? = null
     private var picturePath: String? = null
@@ -118,7 +117,7 @@ class ChatWithFriendViewModel : ViewModel() {
             if (msgKey != null) {
                 mDatabase.reference.child("messages").child(friendUid!!).child(myUid).child(msgKey).setValue(message)
             }
-            _authState.value = AuthState.Success
+            _actionState.value = ActionState.Success
         }
     }
     private fun sendPicture(){
@@ -142,7 +141,7 @@ class ChatWithFriendViewModel : ViewModel() {
             val urlTask = uploadTask.continueWithTask{ task ->
                 if (!task.isSuccessful) {
                     task.exception?.let {
-                        _authState.value = AuthState.AuthError("Upload error: ${it.message}")
+                        _actionState.value = ActionState.ActionError("Upload error: ${it.message}")
                     }
                 }
                 imageRef.downloadUrl
@@ -153,7 +152,7 @@ class ChatWithFriendViewModel : ViewModel() {
                     val message = Message(myUid,friendUid, messageId = msgKey, imageUrl = photoUrl)
                     databaseRef.setValue(message)
                     mDatabase.reference.child("messages").child(friendUid!!).child(myUid).child(msgKey).setValue(message)
-                    _authState.value = AuthState.Success
+                    _actionState.value = ActionState.Success
                 }
             }
         }

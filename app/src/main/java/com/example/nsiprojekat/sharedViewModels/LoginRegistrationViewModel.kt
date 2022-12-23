@@ -1,17 +1,14 @@
 package com.example.nsiprojekat.sharedViewModels
 
-import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.text.Editable
 import android.util.Log
-import android.widget.Toast
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.nsiprojekat.activites.MainActivity
 import com.example.nsiprojekat.Firebase.RealtimeModels.User
+import com.example.nsiprojekat.helpers.ActionState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
@@ -19,7 +16,6 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
-import com.google.rpc.context.AttributeContext.Auth
 import java.io.ByteArrayOutputStream
 
 class LoginRegistrationViewModel : ViewModel() {
@@ -46,8 +42,8 @@ class LoginRegistrationViewModel : ViewModel() {
     val email: LiveData<String> = _email
 
 
-    private val _authState = MutableLiveData<AuthState>(AuthState.Idle)
-    val authState: LiveData<AuthState> = _authState
+    private val _actionState = MutableLiveData<ActionState>(ActionState.Idle)
+    val actionState: LiveData<ActionState> = _actionState
 
     init {
         auth = Firebase.auth
@@ -79,7 +75,7 @@ class LoginRegistrationViewModel : ViewModel() {
                         val user = auth.currentUser
                         UploadInfo()
                     } else {
-                        _authState.value = AuthState.AuthError("Creation Failed!")
+                        _actionState.value = ActionState.ActionError("Creation Failed!")
                     }
                 }
         }
@@ -92,9 +88,9 @@ class LoginRegistrationViewModel : ViewModel() {
                 .addOnCompleteListener() { task ->
                     if (task.isSuccessful) {
                         val user = auth.currentUser
-                        _authState.value = AuthState.Success
+                        _actionState.value = ActionState.Success
                     } else {
-                        _authState.value = AuthState.AuthError("Login Failed!")
+                        _actionState.value = ActionState.ActionError("Login Failed!")
                     }
                 }
         }
@@ -102,7 +98,7 @@ class LoginRegistrationViewModel : ViewModel() {
     private fun UploadInfo(){
         val userID: String = auth.currentUser?.uid ?: ""
         if(userID == "")
-            _authState.value = AuthState.AuthError("Ovo nije trebalo da se desi!")
+            _actionState.value = ActionState.ActionError("Ovo nije trebalo da se desi!")
         //Prvo se upload-uje slika
         var storage = Firebase.storage
         var imageRef: StorageReference? = storage.reference.child("users").child(userID).child("${email.value}.jpg")
@@ -122,7 +118,7 @@ class LoginRegistrationViewModel : ViewModel() {
                                 Log.d("SIGNUP", "User account deleted.")
                             }
                         }
-                    _authState.value = AuthState.AuthError("Upload error: ${it.message}")
+                    _actionState.value = ActionState.ActionError("Upload error: ${it.message}")
                 }
             }
             imageRef.downloadUrl
@@ -140,43 +136,37 @@ class LoginRegistrationViewModel : ViewModel() {
                 }
 
                 auth.currentUser!!.updateProfile(profileUpdate)
-                _authState.value = AuthState.Success
+                _actionState.value = ActionState.Success
             }
         }
     }
     private fun checkData(login: Boolean):Boolean{
         if(email.value == null || email.value == "")
         {
-            _authState.value = AuthState.AuthError("Enter Email!")
+            _actionState.value = ActionState.ActionError("Enter Email!")
             return false
         }
         if(password.value == null || password.value == "")
         {
-            _authState.value = AuthState.AuthError("Enter password!")
+            _actionState.value = ActionState.ActionError("Enter password!")
             return false
         }
         if(!login){
             if(fName.value == null || fName.value == "")
             {
-                _authState.value = AuthState.AuthError("Enter First Name!")
+                _actionState.value = ActionState.ActionError("Enter First Name!")
                 return false
             }
             if(lName.value == null || lName.value == "")
             {
-                _authState.value = AuthState.AuthError("Enter Last Name!")
+                _actionState.value = ActionState.ActionError("Enter Last Name!")
                 return false
             }
             if(picture.value == null){
-                _authState.value = AuthState.AuthError("Picture is needed!")
+                _actionState.value = ActionState.ActionError("Picture is needed!")
                 return false
             }
         }
         return true
     }
-}
-
-sealed class AuthState {
-    object Idle : AuthState()
-    object Success : AuthState()
-    class AuthError(val message: String? = null) : AuthState()
 }
