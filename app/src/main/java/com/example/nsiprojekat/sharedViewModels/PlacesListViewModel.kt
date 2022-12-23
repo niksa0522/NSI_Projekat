@@ -6,11 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.nsiprojekat.Firebase.FirestoreModels.Place
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 
 class PlacesListViewModel : ViewModel() {
+    private val auth = Firebase.auth
+
     private val db = Firebase.firestore
     var query = db.collection("places").orderBy("name")
 
@@ -56,6 +59,18 @@ class PlacesListViewModel : ViewModel() {
 
     private fun resetNameFilter() {
         query = db.collection("places").orderBy("name")
+    }
+
+    fun checkPlaceCreator(): Boolean {
+        return auth.currentUser!!.uid == selectedPlace!!.creatorId
+    }
+
+    fun editPlace() {
+        //TODO: implement
+    }
+
+    fun deletePlace() {
+        //TODO: implement
     }
 
 }

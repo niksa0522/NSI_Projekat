@@ -10,12 +10,8 @@
 
     <color name="purple">#492e9e</color>
     <color name="teal">#02e0d5</color>
-    <color name="orange">#f5775d</color>
+    <color name="orange">#de6850</color>
     <color name="yellow">#FED33C</color>
     <color name="gray">#606066</color>
-
-    <color name="orange_gradient1">#f7846d</color>
-    <color name="orange_gradient2">#FF9680</color>
-    <color name="orange_gradient3">#fab5a0</color>
 
 </resources>

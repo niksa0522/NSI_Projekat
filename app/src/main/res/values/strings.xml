@@ -43,4 +43,8 @@
     <string name="sendRequest">Send chat request</string>
     <string name="acceptBtn">Accept</string>
     <string name="denyBtn">Deny</string>
+    <string name="latitude">Latitude:</string>
+    <string name="longitude">Longitude:</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>

@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.nsiprojekat.Firebase.FirestoreModels.Place
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
@@ -16,6 +17,7 @@ import java.util.UUID
 class AddPlaceViewModel : ViewModel() {
 
     private val db = Firebase.firestore
+    private val auth = Firebase.auth
 
     private val _uploadState = MutableLiveData<UploadState>()
     val uploadState: LiveData<UploadState> = _uploadState
@@ -73,7 +75,7 @@ class AddPlaceViewModel : ViewModel() {
             }.addOnCompleteListener{task ->
                 if(task.isSuccessful){
                     val imageUrl = task.result.toString()
-                    val place = Place(uuid, _placeName.value, _placeLat.value, _placeLong.value, imageUrl, makeSubstrings(_placeName.value!!))
+                    val place = Place(uuid, auth.currentUser!!.uid, _placeName.value, _placeLat.value, _placeLong.value, imageUrl, makeSubstrings(_placeName.value!!))
                     db.collection("places").document(uuid)
                         .set(place)
                         .addOnSuccessListener {
@@ -120,13 +122,7 @@ class AddPlaceViewModel : ViewModel() {
         val size = string.length
         val substrings: MutableList<String> = mutableListOf()
         for (substringSize in 1..size) {
-            for (startIndex in 0 until size) {
-                if (startIndex + substringSize > size) {
-                    break
-                }
-                val substr = string.substring(startIndex, startIndex + substringSize)
-                substrings.add(substr)
-            }
+            substrings.add(string.substring(0, substringSize))
         }
         return substrings
     }

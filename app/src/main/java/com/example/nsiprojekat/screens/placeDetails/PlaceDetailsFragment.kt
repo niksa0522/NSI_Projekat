@@ -39,6 +39,11 @@ class PlaceDetailsFragment : Fragment() {
             Glide.with(context!!).load(viewModel.selectedPlace!!.pictureUrl).into(binding.placePictureDetails)
             binding.tvLat.text = viewModel.selectedPlace!!.latitude
             binding.tvLong.text = viewModel.selectedPlace!!.longitude
+
+            if (!viewModel.checkPlaceCreator()) {
+                binding.btnEdit.visibility = View.GONE
+                binding.btnDelete.visibility = View.GONE
+            }
         }
     }
 
