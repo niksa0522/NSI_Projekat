@@ -1,12 +1,14 @@
 package com.example.nsiprojekat.sharedViewModels
 
 import android.graphics.Bitmap
+import android.net.Uri
 import android.text.Editable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.nsiprojekat.Firebase.FirestoreModels.Place
 import com.example.nsiprojekat.helpers.ActionState
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -19,6 +21,10 @@ class AddPlaceViewModel : ViewModel() {
 
     private val db = Firebase.firestore
     private val auth = Firebase.auth
+    private val storage = Firebase.storage
+
+    var editing = false
+    var changedPicture = false
 
     private val _actionState = MutableLiveData<ActionState>()
     val actionState: LiveData<ActionState> = _actionState
@@ -33,6 +39,9 @@ class AddPlaceViewModel : ViewModel() {
     val placeLat: LiveData<String> = _placeLat
     private val _placeLong = MutableLiveData<String>()
     val placeLong: LiveData<String> = _placeLong
+
+    var pictureUrl: String = ""
+    var placeUid: String = ""
 
 
     fun onPlaceNameTextChanged(p0: Editable?) {
@@ -56,36 +65,25 @@ class AddPlaceViewModel : ViewModel() {
         _placeLong.value = long.toString()
     }
 
-    fun addPlaceToDB() {
+    fun putPlaceToDB() {
         if (checkData()) {
-            val uuid = UUID.randomUUID().toString()
-            val storage = Firebase.storage
-            val imageRef: StorageReference = storage.reference.child("places").child(uuid).child("${uuid}.jpg")
-            val baos = ByteArrayOutputStream()
-            val bitmap = picture.value
-            bitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-            val data = baos.toByteArray()
-            val uploadTask = imageRef.putBytes(data)
-            val urlTask = uploadTask.continueWithTask{ task ->
-                if (!task.isSuccessful) {
-                    task.exception?.let {
-                        _actionState.value = ActionState.ActionError("Upload error: ${it.message}")
+            if (!editing) {
+                val uuid = UUID.randomUUID().toString()
+                uploadPicture(uuid).addOnCompleteListener{task ->
+                    if(task.isSuccessful){
+                        val imageUrl = task.result.toString()
+                        putPlace(uuid, imageUrl)
                     }
                 }
-                imageRef.downloadUrl
-            }.addOnCompleteListener{task ->
-                if(task.isSuccessful){
-                    val imageUrl = task.result.toString()
-                    val place = Place(uuid, auth.currentUser!!.uid, _placeName.value, _placeLat.value, _placeLong.value, imageUrl, makeSubstrings(_placeName.value!!))
-                    db.collection("places").document(uuid)
-                        .set(place)
-                        .addOnSuccessListener {
-                            _actionState.value = ActionState.Success
-                        }
-                        .addOnFailureListener { e ->
-                            imageRef.delete()
-                            _actionState.value = ActionState.ActionError("Upload error: ${e.message}")
-                        }
+            }
+            else {
+                if (changedPicture) {
+                    uploadPicture(placeUid)
+                        .addOnFailureListener { _actionState.value = ActionState.ActionError("Upload error: ${it.message}") }
+                        .addOnSuccessListener { putPlace(placeUid, pictureUrl) }
+                }
+                else {
+                    putPlace(placeUid, pictureUrl)
                 }
             }
         }
@@ -97,6 +95,12 @@ class AddPlaceViewModel : ViewModel() {
         _placeLong.value = ""
         _placeName.value = ""
         _picture.value = null
+    }
+
+    fun setPlaceValues(place: Place) {
+        _placeLat.value = place.latitude
+        _placeLong.value = place.longitude
+        _placeName.value = place.name
     }
 
     private fun checkData(): Boolean {
@@ -126,5 +130,37 @@ class AddPlaceViewModel : ViewModel() {
             substrings.add(string.substring(0, substringSize))
         }
         return substrings
+    }
+
+    private fun uploadPicture(uuid: String): Task<Uri> {
+        val imageRef: StorageReference = storage.reference.child("places").child(uuid).child("${uuid}.jpg")
+        val baos = ByteArrayOutputStream()
+        val bitmap = picture.value
+        bitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+        val uploadTask = imageRef.putBytes(data)
+        val urlTask = uploadTask.continueWithTask{ task ->
+            if (!task.isSuccessful) {
+                task.exception?.let {
+                    _actionState.value = ActionState.ActionError("Upload error: ${it.message}")
+                }
+            }
+            imageRef.downloadUrl
+        }
+        return urlTask
+    }
+
+    private fun putPlace(uuid: String, imageUrl: String) {
+        val place = Place(uuid, auth.currentUser!!.uid, _placeName.value, _placeLat.value, _placeLong.value, imageUrl, makeSubstrings(_placeName.value!!))
+        db.collection("places").document(uuid)
+            .set(place)
+            .addOnSuccessListener {
+                _actionState.value = ActionState.Success
+            }
+            .addOnFailureListener { e ->
+                val imageRef: StorageReference = storage.reference.child("places").child(uuid).child("${uuid}.jpg")
+                imageRef.delete()
+                _actionState.value = ActionState.ActionError("Upload error: ${e.message}")
+            }
     }
 }

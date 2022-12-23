@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -16,6 +17,7 @@ import com.example.nsiprojekat.activites.MainActivity
 import com.example.nsiprojekat.databinding.FragmentPlaceDetailsBinding
 import com.example.nsiprojekat.databinding.FragmentPlacesListBinding
 import com.example.nsiprojekat.helpers.ActionState
+import com.example.nsiprojekat.sharedViewModels.AddPlaceViewModel
 import com.example.nsiprojekat.sharedViewModels.PlacesListViewModel
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
@@ -26,6 +28,7 @@ import com.google.firebase.ktx.Firebase
 class PlaceDetailsFragment : Fragment() {
 
     private val viewModel: PlacesListViewModel by activityViewModels()
+    private val addPlaceVM: AddPlaceViewModel by activityViewModels()
     private var _binding: FragmentPlaceDetailsBinding? = null
     private val binding get() = _binding!!
 
@@ -51,6 +54,10 @@ class PlaceDetailsFragment : Fragment() {
             binding.tvLong.text = viewModel.selectedPlace!!.longitude
 
             binding.btnDelete.setOnClickListener { viewModel.deletePlace() }
+            binding.btnEdit.setOnClickListener {
+                setDataForEdit()
+                findNavController().navigate(R.id.action_placeDetailsFragment_to_addPlaceFragment)
+            }
 
             if (!viewModel.checkPlaceCreator()) {
                 binding.btnEdit.visibility = View.GONE
@@ -58,6 +65,14 @@ class PlaceDetailsFragment : Fragment() {
             }
             initObservers()
         }
+    }
+
+    private fun setDataForEdit() {
+        addPlaceVM.setPlaceValues(viewModel.selectedPlace!!)
+        addPlaceVM.setPicture(binding.placePictureDetails.drawable.toBitmap())
+        addPlaceVM.editing = true
+        addPlaceVM.pictureUrl = viewModel.selectedPlace!!.pictureUrl!!
+        addPlaceVM.placeUid = viewModel.selectedPlace!!.id!!
     }
 
     private fun initObservers() {
@@ -70,12 +85,10 @@ class PlaceDetailsFragment : Fragment() {
             else {
                 if (state is ActionState.ActionError) {
                     Toast.makeText(view!!.context, state.message, Toast.LENGTH_SHORT).show()
+                    viewModel.resetDeleteState()
                 }
             }
         }
         viewModel.deleteState.observe(viewLifecycleOwner, deleteStateObserver)
     }
-
-
-
 }

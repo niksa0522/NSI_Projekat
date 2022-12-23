@@ -50,8 +50,13 @@ class AddPlaceFragment : Fragment() {
             binding.placePic.setImageBitmap(newPicture)
         }
         binding.btnLocation.setOnClickListener { selectPlaceLocation() }
-        binding.btnAddPlace.setOnClickListener { viewModel.addPlaceToDB() }
+        binding.btnAddPlace.setOnClickListener {
+            viewModel.putPlaceToDB()
 
+        }
+        if (viewModel.editing) {
+            binding.btnAddPlace.text = "Save"
+        }
         setUploadStateListener()
     }
 
@@ -66,6 +71,7 @@ class AddPlaceFragment : Fragment() {
                 val data: Intent? = result.data
                 val picture: Bitmap = data?.extras?.get("data") as Bitmap
                 viewModel.setPicture(picture)
+                viewModel.changedPicture = true
             }
     }
 
@@ -95,7 +101,7 @@ class AddPlaceFragment : Fragment() {
             if (state == ActionState.Success) {
                 Toast.makeText(view!!.context, "New place has been added.", Toast.LENGTH_SHORT).show()
                 viewModel.resetAddPlace()
-                findNavController().navigate(R.id.action_addPlaceFragment_to_nav_places)
+                findNavController().popBackStack()
             } else {
                 if (state is ActionState.ActionError) {
                     Toast.makeText(view!!.context, state.message, Toast.LENGTH_SHORT).show()

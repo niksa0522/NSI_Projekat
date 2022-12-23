@@ -10,10 +10,12 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 
 
 class PlacesListViewModel : ViewModel() {
     private val auth = Firebase.auth
+    private val storage = Firebase.storage
 
     private val db = Firebase.firestore
     var query = db.collection("places").orderBy("name")
@@ -69,18 +71,14 @@ class PlacesListViewModel : ViewModel() {
         return auth.currentUser!!.uid == selectedPlace!!.creatorId
     }
 
-    fun editPlace(place: Place) {
-//        db.collection("places").document(selectedPlace!!.id!!).set(place)
-//            .addOnSuccessListener {  }
-//            .addOnFailureListener {  }
-
-    }
-
     fun deletePlace() {
-        //TODO: implement
-        db.collection("places").document(selectedPlace!!.id!!).delete()
-            .addOnSuccessListener { _deleteState.value = ActionState.Success }
-            .addOnFailureListener { _deleteState.value = ActionState.ActionError(it.message) }
+        storage.reference.child("places").child(selectedPlace!!.id!!).delete()
+            .addOnSuccessListener {
+                db.collection("places").document(selectedPlace!!.id!!).delete()
+                    .addOnSuccessListener { _deleteState.value = ActionState.Success }
+                    .addOnFailureListener { _deleteState.value = ActionState.ActionError(it.message) }
+            }
+            .addOnFailureListener{ _deleteState.value = ActionState.ActionError(it.message) }
     }
 
     fun resetDeleteState() {
