@@ -72,13 +72,13 @@ class PlacesListViewModel : ViewModel() {
     }
 
     fun deletePlace() {
-        storage.reference.child("places").child(selectedPlace!!.id!!).delete()
+        storage.reference.child("places").child(selectedPlace!!.id!!).child(selectedPlace!!.id!! + ".jpg").delete()
             .addOnSuccessListener {
                 db.collection("places").document(selectedPlace!!.id!!).delete()
                     .addOnSuccessListener { _deleteState.value = ActionState.Success }
-                    .addOnFailureListener { _deleteState.value = ActionState.ActionError(it.message) }
+                    .addOnFailureListener { _deleteState.value = ActionState.ActionError(it.message + "db") }
             }
-            .addOnFailureListener{ _deleteState.value = ActionState.ActionError(it.message) }
+            .addOnFailureListener{ _deleteState.value = ActionState.ActionError(it.message + "storage") }
     }
 
     fun resetDeleteState() {

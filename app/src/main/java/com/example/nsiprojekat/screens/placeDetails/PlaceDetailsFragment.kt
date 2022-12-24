@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.nsiprojekat.R
 import com.example.nsiprojekat.activites.MainActivity
 import com.example.nsiprojekat.databinding.FragmentPlaceDetailsBinding
@@ -49,11 +50,15 @@ class PlaceDetailsFragment : Fragment() {
 
         if (viewModel.selectedPlace != null) {
             binding.tvName.text = viewModel.selectedPlace!!.name
-            Glide.with(context!!).load(viewModel.selectedPlace!!.pictureUrl).into(binding.placePictureDetails)
+            Glide.with(context!!).load(viewModel.selectedPlace!!.pictureUrl).skipMemoryCache(true).diskCacheStrategy(
+                DiskCacheStrategy.NONE).into(binding.placePictureDetails)
             binding.tvLat.text = viewModel.selectedPlace!!.latitude
             binding.tvLong.text = viewModel.selectedPlace!!.longitude
 
-            binding.btnDelete.setOnClickListener { viewModel.deletePlace() }
+            binding.btnDelete.setOnClickListener {
+                viewModel.deletePlace()
+                //findNavController().popBackStack()
+            }
             binding.btnEdit.setOnClickListener {
                 setDataForEdit()
                 findNavController().navigate(R.id.action_placeDetailsFragment_to_addPlaceFragment)

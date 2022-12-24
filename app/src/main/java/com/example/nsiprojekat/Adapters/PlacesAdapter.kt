@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.nsiprojekat.Firebase.FirestoreModels.Place
 import com.example.nsiprojekat.databinding.ItemPlaceBinding
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
@@ -43,7 +44,8 @@ class PlacesAdapter(options: FirestoreRecyclerOptions<Place>, private val listen
             modelToUse = placesList.find { place -> place.id == model.id }
             if (modelToUse != null){
                 holder.binding.userName.text = modelToUse.name
-                Glide.with(holder.itemView.context).load(modelToUse.pictureUrl).into(holder.binding.placePic)
+                Glide.with(holder.itemView.context).load(modelToUse.pictureUrl).skipMemoryCache(true).diskCacheStrategy(
+                    DiskCacheStrategy.NONE).into(holder.binding.placePic)
                 holder.binding.root.rootView.setOnClickListener {
                     listener.onClicked(modelToUse.id!!)
                 }
@@ -59,7 +61,8 @@ class PlacesAdapter(options: FirestoreRecyclerOptions<Place>, private val listen
         }
         else {
             holder.binding.userName.text = modelToUse!!.name
-            Glide.with(holder.itemView.context).load(modelToUse.pictureUrl).into(holder.binding.placePic)
+            Glide.with(holder.itemView.context).load(modelToUse.pictureUrl).skipMemoryCache(true).diskCacheStrategy(
+                DiskCacheStrategy.NONE).into(holder.binding.placePic)
             holder.binding.root.rootView.setOnClickListener {
                 listener.onClicked(modelToUse.id!!)
             }
