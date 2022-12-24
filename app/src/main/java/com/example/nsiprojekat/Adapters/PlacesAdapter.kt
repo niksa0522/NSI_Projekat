@@ -53,6 +53,10 @@ class PlacesAdapter(options: FirestoreRecyclerOptions<Place>, private val listen
                 holder.itemView.layoutParams = RecyclerView.LayoutParams(0, 0)
             }
         }
+        else if (shouldTrimDistance && placesList.isEmpty()) {
+            holder.itemView.visibility = View.GONE
+            holder.itemView.layoutParams = RecyclerView.LayoutParams(0, 0)
+        }
         else {
             holder.binding.userName.text = modelToUse!!.name
             Glide.with(holder.itemView.context).load(modelToUse.pictureUrl).into(holder.binding.placePic)

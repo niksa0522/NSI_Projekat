@@ -99,7 +99,11 @@ class AddPlaceFragment : Fragment() {
     private fun setUploadStateListener() {
         val actionStateObserver = Observer<ActionState> { state ->
             if (state == ActionState.Success) {
-                Toast.makeText(view!!.context, "New place has been added.", Toast.LENGTH_SHORT).show()
+                var text = "New place has been added."
+                if (viewModel.editing) {
+                    text = "Successfully edited place."
+                }
+                Toast.makeText(view!!.context, text, Toast.LENGTH_SHORT).show()
                 viewModel.resetAddPlace()
                 findNavController().popBackStack()
             } else {

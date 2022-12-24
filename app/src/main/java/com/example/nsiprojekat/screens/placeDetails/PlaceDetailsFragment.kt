@@ -73,6 +73,7 @@ class PlaceDetailsFragment : Fragment() {
         addPlaceVM.editing = true
         addPlaceVM.pictureUrl = viewModel.selectedPlace!!.pictureUrl!!
         addPlaceVM.placeUid = viewModel.selectedPlace!!.id!!
+        addPlaceVM.funUpdatePlace = viewModel.updateSelectedPlace
     }
 
     private fun initObservers() {

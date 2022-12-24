@@ -42,6 +42,7 @@ class AddPlaceViewModel : ViewModel() {
 
     var pictureUrl: String = ""
     var placeUid: String = ""
+    var funUpdatePlace: ((Place) -> Unit)? = null
 
 
     fun onPlaceNameTextChanged(p0: Editable?) {
@@ -95,6 +96,11 @@ class AddPlaceViewModel : ViewModel() {
         _placeLong.value = ""
         _placeName.value = ""
         _picture.value = null
+        pictureUrl = ""
+        placeUid = ""
+        funUpdatePlace = null
+        editing = false
+        changedPicture = false
     }
 
     fun setPlaceValues(place: Place) {
@@ -155,6 +161,9 @@ class AddPlaceViewModel : ViewModel() {
         db.collection("places").document(uuid)
             .set(place)
             .addOnSuccessListener {
+                if (funUpdatePlace != null) {
+                    funUpdatePlace!!.invoke(place)
+                }
                 _actionState.value = ActionState.Success
             }
             .addOnFailureListener { e ->

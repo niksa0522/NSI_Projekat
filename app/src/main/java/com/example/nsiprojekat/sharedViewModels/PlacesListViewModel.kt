@@ -85,4 +85,8 @@ class PlacesListViewModel : ViewModel() {
         _deleteState.value = ActionState.Idle
     }
 
+    var updateSelectedPlace = { place: Place ->
+        selectedPlace = place
+    }
+
 }

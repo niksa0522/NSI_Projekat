@@ -20,6 +20,8 @@ import com.example.nsiprojekat.helpers.PermissionHelper
 import com.example.nsiprojekat.sharedViewModels.AddPlaceViewModel
 import com.example.nsiprojekat.sharedViewModels.PlacesListViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
@@ -103,7 +105,8 @@ class PlaceFiltersFragment : Fragment() {
 
     private fun setupLocationTracking() {
         if(PermissionHelper.isLocationPermissionGranted(requireContext())) {
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+            setupFusedLocationClient()
+            setupLocationUpdates()
         } else {
             requestPermissionLauncherFLC.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         }
@@ -112,15 +115,49 @@ class PlaceFiltersFragment : Fragment() {
     @SuppressLint("MissingPermission")
     private fun setupLocationTrackingWithLocation() {
         if (PermissionHelper.isLocationPermissionGranted(requireContext())) {
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-            fusedLocationClient?.lastLocation?.addOnCompleteListener {
-                if (it.result != null) {
-                    lastLocation = it.result
-                }
-            }
+            setupFusedLocationClient()
+            setupLocationUpdates()
         } else {
             requestPermissionLauncherFLC.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         }
     }
+
+    private fun setupLocationUpdates(){
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        fusedLocationClient?.lastLocation?.addOnSuccessListener {
+            if (it != null) {
+                lastLocation = it
+                currentLocation = LatLng(it.latitude, it.longitude)
+                viewModel.currentLocation = currentLocation
+            }
+        }
+    }
+
+
+    private fun setupFusedLocationClient(){
+        val mLocationRequest = com.google.android.gms.location.LocationRequest.create()
+        mLocationRequest.interval = 60000
+        mLocationRequest.fastestInterval = 5000
+        mLocationRequest.priority = com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
+        val mLocationCallback: LocationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                if (locationResult == null) {
+                    return
+                }
+                for (location in locationResult.locations) {
+                    if (location != null) {
+                        //TODO: UI updates.
+                    }
+                }
+            }
+        }
+        LocationServices.getFusedLocationProviderClient(context!!)
+            .requestLocationUpdates(mLocationRequest, mLocationCallback, null)
+    }
+
+    override fun onStart() {
+        super.onStart()
+    }
+
 
 }
