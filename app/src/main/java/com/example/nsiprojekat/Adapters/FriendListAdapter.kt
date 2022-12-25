@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.nsiprojekat.Firebase.RealtimeModels.ChatRequest
 import com.example.nsiprojekat.Models.ChatRequestWithKey
 import com.example.nsiprojekat.Models.FriendWithKey
@@ -46,7 +47,8 @@ class FriendListAdapter(val options: FirebaseRecyclerOptions<FriendWithKey>,priv
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int, model: FriendWithKey) {
         holder.binding.userName.text = model.friend.displayName
-        Glide.with(holder.itemView.context).load(model.friend.profilePicURl).into(holder.binding.profilePic)
+        Glide.with(holder.itemView.context).load(model.friend.profilePicURl).skipMemoryCache(true).diskCacheStrategy(
+            DiskCacheStrategy.NONE).into(holder.binding.profilePic)
         holder.binding.root.rootView.setOnClickListener{
             listener.onFriendClicked(model.key)
         }

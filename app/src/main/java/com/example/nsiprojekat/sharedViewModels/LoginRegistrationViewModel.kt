@@ -65,6 +65,21 @@ class LoginRegistrationViewModel : ViewModel() {
         _password.value = p0.toString()
     }
 
+    fun changePassword(){
+        if(email.value == null || email.value == "")
+        {
+            _actionState.value = ActionState.ActionError("Enter Email!")
+            return
+        }
+        auth.sendPasswordResetEmail(email.value!!).addOnCompleteListener {
+            if(it.isSuccessful){
+                _actionState.value=ActionState.ActionError("Email for password change has been sent")
+            }else{
+                _actionState.value = ActionState.ActionError("A problem has occurred")
+            }
+        }
+
+    }
 
     fun createAccount(){
         if(checkData(false)) {

@@ -117,5 +117,34 @@
         android:name="com.example.nsiprojekat.screens.crashlytics.CrashFragment"
         android:label="Crashlytics"
         tools:layout="@layout/fragment_crash" />
+    <fragment
+        android:id="@+id/updateProfileFragment"
+        android:name="com.example.nsiprojekat.screens.updateProfile.UpdateProfileFragment"
+        android:label="fragment_update_profile"
+        tools:layout="@layout/fragment_update_profile" >
+        <action
+            android:id="@+id/action_updateProfileFragment_to_pictureDialogFragment"
+            app:destination="@id/pictureDialogFragment" />
+        <action
+            android:id="@+id/action_updateProfileFragment_to_nameDialogFragment"
+            app:destination="@id/nameDialogFragment" />
+        <action
+            android:id="@+id/action_updateProfileFragment_to_passwordDialogFragment"
+            app:destination="@id/passwordDialogFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/pictureDialogFragment"
+        android:name="com.example.nsiprojekat.dialogs.PictureDialogFragment"
+        android:label="fragment_picture_dialog"
+        tools:layout="@layout/fragment_picture_dialog" />
+    <dialog
+        android:id="@+id/nameDialogFragment"
+        android:name="com.example.nsiprojekat.dialogs.NameDialogFragment"
+        android:label="NameDialogFragment" />
+    <dialog
+        android:id="@+id/passwordDialogFragment"
+        android:name="com.example.nsiprojekat.dialogs.PasswordDialogFragment"
+        android:label="fragment_password_dialog"
+        tools:layout="@layout/fragment_password_dialog" />
 
 </navigation>

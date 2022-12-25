@@ -24,5 +24,9 @@
             android:id="@+id/nav_crash"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/crashButton" />
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_baseline_account_circle_24"
+            android:title="@string/account" />
     </group>
 </menu>

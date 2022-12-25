@@ -56,6 +56,7 @@ class LoginFragment : Fragment() {
 
         binding.btnLogin.setOnClickListener{ViewModel.login()}
         binding.tvReg.setOnClickListener{findNavController().navigate(R.id.action_loginFragment_to_registrationFragment)}
+        binding.tvForgotPassword.setOnClickListener{ViewModel.changePassword()}
 
         setAuthStateObserver()
     }

@@ -23,6 +23,7 @@ import com.example.nsiprojekat.R
 import com.example.nsiprojekat.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -59,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         val navView: NavigationView = binding.navView
 
         appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.nav_home,R.id.nav_chat,R.id.nav_remote, R.id.nav_places, R.id.nav_crash
+            R.id.nav_home,R.id.nav_chat,R.id.nav_remote, R.id.nav_places, R.id.nav_crash,R.id.nav_profile
         ), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
@@ -69,7 +70,8 @@ class MainActivity : AppCompatActivity() {
         val tvEmail: TextView = binding.navView.getHeaderView(0).findViewById(R.id.email)
         tvEmail.text = auth.currentUser!!.email
         val profilePic: ImageView = binding.navView.getHeaderView(0).findViewById(R.id.profilePic)
-        Glide.with(this).load(auth.currentUser!!.photoUrl).into(profilePic)
+        Glide.with(this).load(auth.currentUser!!.photoUrl).skipMemoryCache(true).diskCacheStrategy(
+            DiskCacheStrategy.NONE).into(profilePic)
         val tvLogout: TextView = binding.tVlogout
         tvLogout.setOnClickListener{Logout()}
 

@@ -47,4 +47,14 @@
     <string name="longitude">Longitude:</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="userName">First and Last Name</string>
+    <string name="editName">Change Name</string>
+    <string name="editPassword">Change Password</string>
+    <string name="areYouSure">Are you sure you want to update your profile picture?</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="changeName">Change First and Last Name</string>
+    <string name="changePassword">Change Password</string>
+    <string name="tvForgotPassword">I forgot my password</string>
+    <string name="account">Account Info</string>
 </resources>
