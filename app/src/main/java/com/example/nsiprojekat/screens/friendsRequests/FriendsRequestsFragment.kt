@@ -43,6 +43,8 @@ class FriendsRequestsFragment : Fragment(),RequestsAdapter.RequestClickInterface
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.getFriends()
+
         viewModel.requests.observe(viewLifecycleOwner){
             if(it.size>0){
                 var list = it

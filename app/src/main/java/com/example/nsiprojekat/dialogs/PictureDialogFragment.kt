@@ -9,10 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.Observer
 import com.example.nsiprojekat.R
 import com.example.nsiprojekat.databinding.FragmentPictureDialogBinding
+import com.example.nsiprojekat.helpers.ActionState
 import com.example.nsiprojekat.sharedViewModels.UpdateProfileViewModel
 
 class PictureDialogFragment : DialogFragment() {
@@ -45,19 +49,19 @@ class PictureDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        sharedViewModel.resetActionState()
         sharedViewModel.profilePicture.observe(viewLifecycleOwner) {
             binding.imgNewPic.setImageBitmap(it)
         }
 
         binding.btnConfirm.setOnClickListener {
             sharedViewModel.updatePicture()
-            dismiss()
         }
         binding.btnCancel.setOnClickListener {
             sharedViewModel.cancelPicture()
             dismiss()
         }
+        setAuthStateObserver()
         //malo lose izgleda ali tako je napravljen dialog, pokusao sam da sredim nije mi uspelo
 
     }
@@ -71,9 +75,24 @@ class PictureDialogFragment : DialogFragment() {
             WindowManager.LayoutParams.MATCH_PARENT
         )
     }
+    private fun setAuthStateObserver() {
+        val actionStateObserver = Observer<ActionState> { state ->
+            if (state == ActionState.Success) {
+                Toast.makeText(view!!.context, "Updated successfully", Toast.LENGTH_SHORT).show()
+                setFragmentResult("Change Picture", Bundle())
+                dismiss()
+            } else {
+                if (state is ActionState.ActionError) {
+                    Toast.makeText(view!!.context, state.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        sharedViewModel.actionState.observe(viewLifecycleOwner, actionStateObserver)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        sharedViewModel.actionState.removeObservers(viewLifecycleOwner)
         _binding = null
     }
 

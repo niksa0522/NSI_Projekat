@@ -36,29 +36,23 @@ class UpdateProfileViewModel : ViewModel() {
 
     val profilePicture: LiveData<Bitmap> = _profilePicture
 
-    private val _fName = MutableLiveData<String>()
+    val fName = MutableLiveData<String>()
+    val lName = MutableLiveData<String>()
 
-    val fName: LiveData<String> = _fName
-
-    private val _lName = MutableLiveData<String>()
-
-    val lName: LiveData<String> = _lName
 
     private var userPhotoUrl :String? = ""
 
     private val _actionState = MutableLiveData<ActionState>(ActionState.Idle)
     val actionState: LiveData<ActionState> = _actionState
 
-    fun onFNameTextChanged(p0: Editable?){
-        _fName.value = p0.toString()
-    }
-    fun onLNameTextChanged(p0: Editable?){
-        _lName.value = p0.toString()
-    }
 
 
     init {
         auth = Firebase.auth
+    }
+
+    fun resetActionState(){
+        _actionState.value = ActionState.Idle
     }
 
     fun setName(){
@@ -67,8 +61,8 @@ class UpdateProfileViewModel : ViewModel() {
         database.reference.child("users").child(userID).get().addOnSuccessListener {
             val user = it.getValue(User::class.java)
             if(user!=null){
-                _fName.value=user.fname
-                _lName.value=user.lname
+                fName.value=user.fname
+                lName.value=user.lname
                 userPhotoUrl=user.imageUrl
             }
         }
@@ -86,16 +80,18 @@ class UpdateProfileViewModel : ViewModel() {
         val profileUpdate = userProfileChangeRequest {
             displayName = "${fName.value} ${lName.value}"
         }
-        auth.currentUser!!.updateProfile(profileUpdate)
+
         val uid = auth.currentUser?.uid!!
         val database = Firebase.database("https://nsi-projekat-default-rtdb.europe-west1.firebasedatabase.app/")
         val user = User(fName.value,lName.value,userPhotoUrl)
         database.reference.child("users").child(uid).setValue(user)
+        auth.currentUser!!.updateProfile(profileUpdate).addOnCompleteListener {
+            _actionState.value = ActionState.Success
+        }
         updateFriendsInfo(database,uid)
-
     }
     private fun updateFriendsInfo(mDatabase:FirebaseDatabase,uid:String){
-        val friend = Friend(auth.currentUser!!.displayName,auth.currentUser!!.photoUrl.toString())
+        val friend = Friend("${fName.value} ${lName.value}",auth.currentUser!!.photoUrl.toString())
         mDatabase.reference.child("friends").child(uid).addChildEventListener(object:
             ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
@@ -148,34 +144,12 @@ class UpdateProfileViewModel : ViewModel() {
 
         val urlTask = uploadTask.continueWithTask{ task ->
             if (!task.isSuccessful) {
-                task.exception?.let {
-                    val user = auth.currentUser
-                    user!!.delete()
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                Log.d("SIGNUP", "User account deleted.")
-                            }
-                        }
-                }
+                //error
             }
             imageRef.downloadUrl
         }.addOnCompleteListener{task ->
             if(task.isSuccessful){
-                //ovo za sada ne treba
-                //kada je slika uploadovana uzima se njen url i uploaduje se user
-                //TODO: mozda treba da se updateuje uri
-               /* val imageUrl = task.result.toString()
-                val user = User(fName.value,lName.value,imageUrl)
-                val database = Firebase.database("https://nsi-projekat-default-rtdb.europe-west1.firebasedatabase.app/")
-                val userRef = database.reference.child("users").child(userID).setValue(user)
-                database.reference.child("emails").child(userID).setValue(email.value)
-                val profileUpdate = userProfileChangeRequest {
-                    displayName = "${fName.value} ${lName.value}"
-                    photoUri = Uri.parse(imageUrl)
-                }
-
-                auth.currentUser!!.updateProfile(profileUpdate)
-                _actionState.value = ActionState.Success*/
+                _actionState.value = ActionState.Success
             }
         }
     }

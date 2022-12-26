@@ -15,6 +15,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.75"
+            android:background="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineStart"
             android:layout_width="wrap_content"
@@ -86,7 +95,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="top"
-                    android:afterTextChanged="@{data.onFNameTextChanged}"
+                    android:text="@={data.fName}"
                     android:textAlignment="textStart"
                     android:textColorHint="#757575" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -109,7 +118,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="top"
-                    android:afterTextChanged="@{data.onLNameTextChanged}"
+                    android:text="@={data.lName}"
                     android:textAlignment="textStart"
                     android:textColorHint="#757575" />
             </com.google.android.material.textfield.TextInputLayout>

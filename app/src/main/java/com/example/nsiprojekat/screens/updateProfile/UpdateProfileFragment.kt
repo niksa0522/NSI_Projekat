@@ -6,16 +6,19 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.nsiprojekat.R
+import com.example.nsiprojekat.activites.MainActivity
 import com.example.nsiprojekat.databinding.FragmentUpdateProfileBinding
 import com.example.nsiprojekat.helpers.PermissionHelper
 import com.example.nsiprojekat.sharedViewModels.UpdateProfileViewModel
@@ -43,12 +46,18 @@ class UpdateProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         auth = Firebase.auth
+
         Glide.with(this).load(auth.currentUser!!.photoUrl).skipMemoryCache(true).diskCacheStrategy(
             DiskCacheStrategy.NONE).into(binding.imgProfilePic)
         binding.textNameValue.text = auth.currentUser!!.displayName
 
         binding.btnChangeName.setOnClickListener {
             viewModel.setName()
+            setFragmentResultListener("Change Name"){ requestKey, bundle ->
+                binding.textNameValue.text = auth.currentUser!!.displayName
+                val activity:MainActivity = activity as MainActivity
+                activity.changeName()
+            }
             findNavController().navigate(R.id.action_updateProfileFragment_to_nameDialogFragment)
         }
         binding.btnChangePassword.setOnClickListener {
@@ -60,15 +69,26 @@ class UpdateProfileFragment : Fragment() {
 
 
     }
-    val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+    private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             result-> if(result.resultCode == Activity.RESULT_OK){
         val data: Intent? = result.data
         val picture: Bitmap = data?.extras?.get("data") as Bitmap
         viewModel.setPicture(picture)
+        setFragmentResultListener("Change Picture"){ requestKey, bundle ->
+            Glide.with(this).load(auth.currentUser!!.photoUrl).skipMemoryCache(true).diskCacheStrategy(
+                DiskCacheStrategy.NONE).into(binding.imgProfilePic)
+            val activity:MainActivity = activity as MainActivity
+            activity.changePicture()
+
+        }
         findNavController().navigate(R.id.action_updateProfileFragment_to_pictureDialogFragment)
         }
     }
-    fun takePicture(){
+
+    override fun onResume() {
+        super.onResume()
+    }
+    private fun takePicture(){
         if(PermissionHelper.isCameraPermissionGranted(requireContext())) {
             val cameraIntent: Intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             resultLauncher.launch(cameraIntent)

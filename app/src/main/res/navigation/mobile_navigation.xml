@@ -118,9 +118,9 @@
         android:label="Crashlytics"
         tools:layout="@layout/fragment_crash" />
     <fragment
-        android:id="@+id/updateProfileFragment"
+        android:id="@+id/nav_profile"
         android:name="com.example.nsiprojekat.screens.updateProfile.UpdateProfileFragment"
-        android:label="fragment_update_profile"
+        android:label="Update Profile"
         tools:layout="@layout/fragment_update_profile" >
         <action
             android:id="@+id/action_updateProfileFragment_to_pictureDialogFragment"

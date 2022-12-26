@@ -55,7 +55,7 @@ class PasswordDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        sharedViewModel.resetActionState()
         binding.btnConfirm.setOnClickListener {
             sharedViewModel.updatePassword(binding.textPassword.text.toString())
         }
@@ -69,7 +69,7 @@ class PasswordDialogFragment : DialogFragment() {
     private fun setAuthStateObserver() {
         val actionStateObserver = Observer<ActionState> { state ->
             if (state == ActionState.Success) {
-                Toast.makeText(view!!.context, "Azuriranje je uspesno", Toast.LENGTH_SHORT).show()
+                Toast.makeText(view!!.context, "Updated successfully", Toast.LENGTH_SHORT).show()
                 dismiss()
             } else {
                 if (state is ActionState.ActionError) {

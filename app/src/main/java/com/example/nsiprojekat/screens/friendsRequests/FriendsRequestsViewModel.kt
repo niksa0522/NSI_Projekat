@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.nsiprojekat.Firebase.RealtimeModels.ChatRequest
 import com.example.nsiprojekat.Firebase.RealtimeModels.Friend
 import com.example.nsiprojekat.Models.ChatRequestWithKey
+import com.example.nsiprojekat.Models.FriendWithKey
 import com.example.nsiprojekat.helpers.LiveDataHelper.minusAssign
 import com.example.nsiprojekat.helpers.LiveDataHelper.plusAssign
 import com.google.firebase.auth.ktx.auth
@@ -28,6 +29,8 @@ class FriendsRequestsViewModel : ViewModel() {
 
     private val _requestMessage=MutableLiveData<String>()
     val requestMessage:LiveData<String> = _requestMessage
+
+    private val friends= mutableListOf<String>()
 
     fun getRequests(){
         val uid = auth.uid
@@ -59,6 +62,31 @@ class FriendsRequestsViewModel : ViewModel() {
         }
     }
 
+    fun getFriends(){
+        val uid = auth.uid
+        if(uid!=null){
+            mDatabase.reference.child("friends").child(uid).addChildEventListener(object:
+                ChildEventListener {
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    friends.add(snapshot.key!!)
+                }
+
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                }
+
+                override fun onChildRemoved(snapshot: DataSnapshot) {
+                    //ovo ne moze da se desi
+                }
+
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
+        }
+    }
+
     fun sendRequest(email:String){
         if(email.equals(auth.currentUser!!.email)){
             _requestMessage.value="You have enter your email address"
@@ -70,10 +98,15 @@ class FriendsRequestsViewModel : ViewModel() {
                     val hashMap = result as HashMap<*, *>
                     hashMap.forEach { entry ->
                         val uid = entry.key as String
-                        if(auth.uid!=null){
+                        if(friends.contains(uid)){
+                            _requestMessage.value="You already have this user as a friend"
+                            return@addOnCompleteListener
+                        }
+                        else if(auth.uid!=null){
                             val requestRef = mDatabase.reference.child("chatRequests").child(uid).child(auth.uid!!)
                                 .setValue(ChatRequest(auth.currentUser!!.displayName!!,auth.uid!!,auth.currentUser!!.photoUrl.toString()))
                         }
+
                         //Mozda ovde isto moze da se posalje poruka
                     }
 

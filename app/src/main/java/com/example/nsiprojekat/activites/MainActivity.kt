@@ -65,13 +65,10 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        val tvName: TextView = binding.navView.getHeaderView(0).findViewById(R.id.fullname)
-        tvName.text = auth.currentUser!!.displayName
+        changeName()
         val tvEmail: TextView = binding.navView.getHeaderView(0).findViewById(R.id.email)
         tvEmail.text = auth.currentUser!!.email
-        val profilePic: ImageView = binding.navView.getHeaderView(0).findViewById(R.id.profilePic)
-        Glide.with(this).load(auth.currentUser!!.photoUrl).skipMemoryCache(true).diskCacheStrategy(
-            DiskCacheStrategy.NONE).into(profilePic)
+        changePicture()
         val tvLogout: TextView = binding.tVlogout
         tvLogout.setOnClickListener{Logout()}
 
@@ -91,6 +88,15 @@ class MainActivity : AppCompatActivity() {
             Log.d("MAIN", msg)
             //Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
         })
+    }
+    fun changeName(){
+        val tvName: TextView = binding.navView.getHeaderView(0).findViewById(R.id.fullname)
+        tvName.text = auth.currentUser!!.displayName
+    }
+    fun changePicture(){
+        val profilePic: ImageView = binding.navView.getHeaderView(0).findViewById(R.id.profilePic)
+        Glide.with(this).load(auth.currentUser!!.photoUrl).skipMemoryCache(true).diskCacheStrategy(
+            DiskCacheStrategy.NONE).into(profilePic)
     }
 
     override fun onSupportNavigateUp(): Boolean {
