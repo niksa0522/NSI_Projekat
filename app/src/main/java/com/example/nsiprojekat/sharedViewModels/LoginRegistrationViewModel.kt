@@ -140,8 +140,9 @@ class LoginRegistrationViewModel : ViewModel() {
                     photoUri = Uri.parse(imageUrl)
                 }
 
-                auth.currentUser!!.updateProfile(profileUpdate)
-                _actionState.value = ActionState.Success
+                auth.currentUser!!.updateProfile(profileUpdate).addOnCompleteListener {
+                    _actionState.value = ActionState.Success
+                }
             }
         }
     }

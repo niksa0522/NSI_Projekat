@@ -32,6 +32,10 @@ class FriendsRequestsViewModel : ViewModel() {
 
     private val friends= mutableListOf<String>()
 
+    fun resetMessage(){
+        _requestMessage.value=null
+    }
+
     fun getRequests(){
         val uid = auth.uid
         if(uid!=null){

@@ -29,6 +29,7 @@ class FriendsRequestsFragment : Fragment(),RequestsAdapter.RequestClickInterface
 
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,6 +60,7 @@ class FriendsRequestsFragment : Fragment(),RequestsAdapter.RequestClickInterface
         }
         viewModel.requestMessage.observe(viewLifecycleOwner){
             Toast.makeText(requireContext(),it,Toast.LENGTH_SHORT).show()
+            viewModel.resetMessage()
         }
         binding.buttonSendRequest.setOnClickListener {
             if(binding.etEmail.text.toString()!=""){
