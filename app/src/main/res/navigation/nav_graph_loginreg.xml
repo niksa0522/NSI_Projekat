@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.nsiprojekat.screens.login.LoginFragment"
-        android:label="LoginFragment" >
+        android:label="Login" >
         <action
             android:id="@+id/action_loginFragment_to_registrationFragment"
             app:destination="@id/registrationFragment" />
@@ -16,7 +16,7 @@
     <fragment
         android:id="@+id/registrationFragment"
         android:name="com.example.nsiprojekat.screens.registration.RegistrationFragment"
-        android:label="fragment_registration"
+        android:label="Registration"
         tools:layout="@layout/fragment_registration" >
         <action
             android:id="@+id/action_registrationFragment_to_loginFragment"

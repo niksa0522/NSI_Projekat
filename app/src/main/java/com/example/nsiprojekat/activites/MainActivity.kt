@@ -35,16 +35,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var auth: FirebaseAuth
 
-    // Declare the launcher at the top of your Activity/Fragment:
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        if (isGranted) {
-            // FCM SDK (and your app) can post notifications.
-        } else {
-            // TODO: Inform user that that your app will not show notifications.
-        }
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +63,7 @@ class MainActivity : AppCompatActivity() {
         val tvLogout: TextView = binding.tVlogout
         tvLogout.setOnClickListener{Logout()}
 
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 
         Firebase.messaging.token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
@@ -80,13 +71,10 @@ class MainActivity : AppCompatActivity() {
                 return@OnCompleteListener
             }
 
-            // Get new FCM registration token
             val token = task.result
 
-            // Log and toast
             val msg = getString(R.string.msg_token_fmt, token)
             Log.d("MAIN", msg)
-            //Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
         })
     }
     fun changeName(){
@@ -109,11 +97,5 @@ class MainActivity : AppCompatActivity() {
         i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(i)
         finish()
-    }
-
-    fun runtimeEnableAutoInit() {
-        // [START fcm_runtime_enable_auto_init]
-        Firebase.messaging.isAutoInitEnabled = true
-        // [END fcm_runtime_enable_auto_init]
     }
 }

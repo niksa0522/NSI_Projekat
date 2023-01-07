@@ -146,7 +146,6 @@ class PlaceFiltersFragment : Fragment() {
                 }
                 for (location in locationResult.locations) {
                     if (location != null) {
-                        //TODO: UI updates.
                     }
                 }
             }

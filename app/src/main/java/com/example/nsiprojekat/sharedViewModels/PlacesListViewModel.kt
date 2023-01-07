@@ -9,6 +9,7 @@ import com.example.nsiprojekat.helpers.ActionState
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
@@ -53,13 +54,20 @@ class PlacesListViewModel : ViewModel() {
         }
     }
 
+    fun getPlace(id:String){
+        db.collection("places").document(id).get().addOnSuccessListener {
+            selectedPlace=it.toObject<Place>()
+        }
+    }
+
     fun onDistanceFilterCheckedChanged() {
         _distanceFilterOn.value = !_distanceFilterOn.value!!
     }
 
     fun setNameQuery() {
         if (placeNameFilter.value != null && _nameFilterOn.value!!) {
-            query = db.collection("places").orderBy("name").whereArrayContains("nameQueryList", placeNameFilter.value!!)
+            query = db.collection("places").orderBy("name")
+                .whereArrayContains("nameQueryList", placeNameFilter.value!!)
         }
     }
 
@@ -72,7 +80,8 @@ class PlacesListViewModel : ViewModel() {
     }
 
     fun deletePlace() {
-        storage.reference.child("places").child(selectedPlace!!.id!!).child(selectedPlace!!.id!! + ".jpg").delete()
+        storage.reference.child("places").child(selectedPlace!!.id!!)
+            .child(selectedPlace!!.id!! + ".jpg").delete()
             .addOnSuccessListener {
                 db.collection("places").document(selectedPlace!!.id!!).delete()
                     .addOnSuccessListener { _deleteState.value = ActionState.Success }

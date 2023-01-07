@@ -42,6 +42,12 @@ class PlaceDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPlaceDetailsBinding.inflate(inflater, container, false)
+
+        val id = arguments?.getString("id")
+        //val myUid = Firebase.auth.uid
+        if(id!=null /*&& myUid!=null*/)
+            viewModel.getPlace(id)
+
         return binding.root
     }
 
@@ -50,7 +56,8 @@ class PlaceDetailsFragment : Fragment() {
 
         if (viewModel.selectedPlace != null) {
             binding.tvName.text = viewModel.selectedPlace!!.name
-            Glide.with(context!!).load(viewModel.selectedPlace!!.pictureUrl).skipMemoryCache(true).diskCacheStrategy(
+            Glide.with(context!!).load(viewModel.selectedPlace!!.pictureUrl)
+                .skipMemoryCache(true).diskCacheStrategy(
                 DiskCacheStrategy.NONE).into(binding.placePictureDetails)
             binding.tvLat.text = viewModel.selectedPlace!!.latitude
             binding.tvLong.text = viewModel.selectedPlace!!.longitude

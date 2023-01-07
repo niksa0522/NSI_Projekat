@@ -78,8 +78,10 @@ class LoginFragment : Fragment() {
             if (state == ActionState.Success) {
                 val i: Intent = Intent(activity, MainActivity::class.java)
 
-                val analytics = Firebase.analytics
+
                 val auth = Firebase.auth
+
+                val analytics = Firebase.analytics
                 analytics.setUserId(auth.uid)
                 val bundle = Bundle()
                 bundle.putString(FirebaseAnalytics.Param.METHOD, "firebaseAuth")

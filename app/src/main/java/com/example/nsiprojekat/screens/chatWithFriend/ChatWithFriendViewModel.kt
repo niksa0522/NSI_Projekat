@@ -24,7 +24,8 @@ import java.io.ByteArrayOutputStream
 class ChatWithFriendViewModel : ViewModel() {
 
 
-    private val mDatabase = Firebase.database("https://nsi-projekat-default-rtdb.europe-west1.firebasedatabase.app/")
+    private val mDatabase = Firebase.database(
+        "https://nsi-projekat-default-rtdb.europe-west1.firebasedatabase.app/")
     private val auth = Firebase.auth
 
     private val _messages = MutableLiveData<MutableList<Message>>()
@@ -76,32 +77,29 @@ class ChatWithFriendViewModel : ViewModel() {
 
         if(myUid!=null && friendUid!=null){
 
-            mDatabase.reference.child("friends").child(myUid!!).child(friendUid!!).get().addOnCompleteListener {
+            mDatabase.reference.child("friends").child(myUid!!).child(friendUid!!)
+                .get().addOnCompleteListener {
                 val user = it.result.getValue<Friend>()
                 _name.value = user?.displayName
             }
 
-            mDatabase.reference.child("messages").child(myUid!!).child(friendUid!!).addChildEventListener(object:
+            mDatabase.reference.child("messages").child(myUid!!).child(friendUid!!)
+                .addChildEventListener(object:
                 ChildEventListener {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                     val message = snapshot.getValue(Message::class.java)
                     if(message!=null)
                         _messages+= message
                 }
-
                 override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
                 }
-
                 override fun onChildRemoved(snapshot: DataSnapshot) {
-                    //ne znam da li ovo radi, poruke ne mogu da se brisu
                     val message = snapshot.getValue(Message::class.java)
                     if(message!=null)
                         _messages-= message
                 }
-
                 override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
                 }
-
                 override fun onCancelled(error: DatabaseError) {
                 }
             })
@@ -127,7 +125,6 @@ class ChatWithFriendViewModel : ViewModel() {
             val msgKey = databaseRef.key
             if(msgKey==null)
             {
-                //ovo ne moze da se desi al ajde
                 databaseRef.removeValue()
                 return
             }

@@ -46,12 +46,10 @@ class FriendsRequestsViewModel : ViewModel() {
                 }
 
                 override fun onChildRemoved(snapshot: DataSnapshot) {
-                    //ne znam da li ovo radi, samo osoba koja dobije request moze da ga obrise
                     val request = snapshot.getValue(ChatRequest::class.java)
                     if(request!=null)
                         _requests-= ChatRequestWithKey(request,snapshot.key!!)
                 }
-                //TODO check if requests are deleted and if they can be duped
 
                 override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
                 }
@@ -91,7 +89,8 @@ class FriendsRequestsViewModel : ViewModel() {
         if(email.equals(auth.currentUser!!.email)){
             _requestMessage.value="You have enter your email address"
         }
-        mDatabase.reference.child("emails").orderByChild("value").equalTo(email).limitToFirst(1).get().addOnCompleteListener() {
+        mDatabase.reference.child("emails").orderByChild("value")
+            .equalTo(email).limitToFirst(1).get().addOnCompleteListener() {
             if(it.isSuccessful){
                 val result = it.result.value
                 if(result!=null){
@@ -121,17 +120,17 @@ class FriendsRequestsViewModel : ViewModel() {
     fun acceptRequest(request:ChatRequest, requestKey:String){
         addFriend(request)
         deleteRequest(requestKey)
-        //moze da se preko cloud messaging mozda posalje notifikacija
     }
     fun denyRequest(requestKey:String){
         deleteRequest(requestKey)
-        //moze da se preko cloud messaging mozda posalje notifikacija
     }
     private fun addFriend(request:ChatRequest){
         val uid = auth.uid
         if(uid!=null){
-            mDatabase.reference.child("friends").child(uid).child(request.uidSender!!).setValue(Friend(request.name,request.profilePicUrl))
-            mDatabase.reference.child("friends").child(request.uidSender!!).child(uid).setValue(Friend(auth.currentUser!!.displayName,auth.currentUser!!.photoUrl.toString()))
+            mDatabase.reference.child("friends").child(uid).child(request.uidSender!!).
+            setValue(Friend(request.name,request.profilePicUrl))
+            mDatabase.reference.child("friends").child(request.uidSender!!).child(uid).
+            setValue(Friend(auth.currentUser!!.displayName,auth.currentUser!!.photoUrl.toString()))
         }
     }
     private fun deleteRequest(requestKey: String){

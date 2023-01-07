@@ -19,35 +19,27 @@ import com.google.firebase.storage.ktx.storage
 import java.io.ByteArrayOutputStream
 
 class LoginRegistrationViewModel : ViewModel() {
-    private lateinit var auth: FirebaseAuth
+
+    private var auth: FirebaseAuth = Firebase.auth
 
     private val _picture = MutableLiveData<Bitmap>()
-
     val picture: LiveData<Bitmap> = _picture
 
     private val _fName = MutableLiveData<String>()
-
     val fName: LiveData<String> = _fName
 
     private val _lName = MutableLiveData<String>()
-
     val lName: LiveData<String> = _lName
 
     private val _password = MutableLiveData<String>()
-
     val password: LiveData<String> = _password
 
     private val _email = MutableLiveData<String>()
-
     val email: LiveData<String> = _email
 
 
     private val _actionState = MutableLiveData<ActionState>(ActionState.Idle)
     val actionState: LiveData<ActionState> = _actionState
-
-    init {
-        auth = Firebase.auth
-    }
 
     fun setPicture(picture: Bitmap){
         _picture.value=picture
@@ -87,7 +79,6 @@ class LoginRegistrationViewModel : ViewModel() {
             auth.createUserWithEmailAndPassword(email, password.value!!)
                 .addOnCompleteListener() { task ->
                     if (task.isSuccessful) {
-                        val user = auth.currentUser
                         UploadInfo()
                     } else {
                         _actionState.value = ActionState.ActionError("Creation Failed!")
@@ -102,7 +93,6 @@ class LoginRegistrationViewModel : ViewModel() {
             auth.signInWithEmailAndPassword(email, password.value!!)
                 .addOnCompleteListener() { task ->
                     if (task.isSuccessful) {
-                        val user = auth.currentUser
                         _actionState.value = ActionState.Success
                     } else {
                         _actionState.value = ActionState.ActionError("Login Failed!")

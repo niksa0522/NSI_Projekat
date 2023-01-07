@@ -16,11 +16,11 @@
     <string name="hint_pW">Password</string>
     <string name="hint_FName">First Name</string>
     <string name="hint_LName">Last Name</string>
-    <string name="btnReg">Sign In</string>
+    <string name="btnReg">Sign Up</string>
     <string name="tVlogin">Login</string>
     <string name="btnAddPicture">Add Picture</string>
     <string name="btnLogin">Login</string>
-    <string name="tVReg">Sign In</string>
+    <string name="tVReg">Sign Up</string>
     <string name="tVSignOut">Logout</string>
     <string name="hint_Email">Email</string>
     <string name="menu_chat">Chat</string>

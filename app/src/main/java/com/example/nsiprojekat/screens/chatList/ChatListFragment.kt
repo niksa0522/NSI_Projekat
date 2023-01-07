@@ -75,7 +75,6 @@ class ChatListFragment : Fragment(),FriendListAdapter.FriendClickInterface {
 
 
 
-        //TODO change look of friends and requests screens
 
     }
 

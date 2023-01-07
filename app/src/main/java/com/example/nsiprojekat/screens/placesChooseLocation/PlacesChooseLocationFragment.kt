@@ -27,7 +27,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 
 class PlacesChooseLocationFragment : Fragment() {
 
-    //FIXME: this is shitcode and needs revisions asap
 
     private val viewModel: AddPlaceViewModel by activityViewModels()
     private var fusedLocationClient: FusedLocationProviderClient? = null

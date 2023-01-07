@@ -139,7 +139,8 @@ class AddPlaceViewModel : ViewModel() {
     }
 
     private fun uploadPicture(uuid: String): Task<Uri> {
-        val imageRef: StorageReference = storage.reference.child("places").child(uuid).child("${uuid}.jpg")
+        val imageRef: StorageReference = storage.reference.child("places")
+            .child(uuid).child("${uuid}.jpg")
         val baos = ByteArrayOutputStream()
         val bitmap = picture.value
         bitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, baos)
@@ -167,7 +168,8 @@ class AddPlaceViewModel : ViewModel() {
                 _actionState.value = ActionState.Success
             }
             .addOnFailureListener { e ->
-                val imageRef: StorageReference = storage.reference.child("places").child(uuid).child("${uuid}.jpg")
+                val imageRef: StorageReference = storage.reference.child("places")
+                    .child(uuid).child("${uuid}.jpg")
                 imageRef.delete()
                 _actionState.value = ActionState.ActionError("Upload error: ${e.message}")
             }

@@ -22,7 +22,7 @@ import com.example.nsiprojekat.helpers.ActionState
 import java.io.FileDescriptor
 import java.io.IOException
 
-class ChatWithFriendFragment : Fragment(),ChatAdapter.ChatInterface {
+class ChatWithFriendFragment : Fragment() {
 
     private val viewModel: ChatWithFriendViewModel by viewModels()
     private var _binding: FragmentChatWithFriendBinding?= null
@@ -53,10 +53,7 @@ class ChatWithFriendFragment : Fragment(),ChatAdapter.ChatInterface {
         viewModel.message.observe(viewLifecycleOwner){
             if(it.size>0){
                 var list = it
-                //mozda obrnuti listu
                 if(adapter==null){
-
-
                     adapter= ChatAdapter()
                     binding.recyclerMessages.adapter=adapter
                 }
@@ -65,7 +62,6 @@ class ChatWithFriendFragment : Fragment(),ChatAdapter.ChatInterface {
             }
         }
 
-        //TODO prikazi razliku izmedju adaptera za prezentaciju
         /*val options = FirebaseRecyclerOptions.Builder<Message>().setQuery(viewModel.getQuery(),Message::class.java).setLifecycleOwner(viewLifecycleOwner).build()
 
         binding.recyclerMessages.itemAnimator = null
@@ -134,10 +130,6 @@ class ChatWithFriendFragment : Fragment(),ChatAdapter.ChatInterface {
         super.onDestroyView()
         viewModel.actionState.removeObservers(viewLifecycleOwner)
         _binding = null
-    }
-
-    override fun onMessageAdded() {
-        binding.recyclerMessages.smoothScrollToPosition(adapter!!.itemCount)
     }
 
 }

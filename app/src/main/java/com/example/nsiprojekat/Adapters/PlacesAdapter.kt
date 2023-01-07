@@ -15,9 +15,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.gms.maps.model.LatLng
 
 class PlacesAdapter(options: FirestoreRecyclerOptions<Place>, private val listener:ClickInterface)
-    : FirestoreRecyclerAdapter<Place, PlacesAdapter.ViewHolder>(
-    options
-) {
+    : FirestoreRecyclerAdapter<Place, PlacesAdapter.ViewHolder>(options) {
     private var radius = 0.0
     private var shouldTrimDistance = false
     private var placesList: List<Place> = listOf()
